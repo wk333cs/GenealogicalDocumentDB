@@ -1,17 +1,57 @@
 package org.example;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+    private static final String DB_URL = "jdbc:sqlite:gen.db";
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+    public static void main(String[] args) {
+        try (Connection conn = DriverManager.getConnection(DB_URL)) {
+            Statement s = conn.createStatement();
+            createProfTable(conn);
+            createDocTable(conn);
+
+
+        } catch (SQLException e) {
+            System.out.println("Database error: " + e.getMessage());
+        }
+
+    }
+    public static void createProfTable(Connection conn) throws SQLException {
+        String sql = """
+               CREATE TABLE IF NOT EXISTS profiles(
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               profileName TEXT NOT NULL
+             
+             );
+                """;
+        try(Statement stnt = conn.createStatement()) {
+            stnt.execute(sql);
+        }
+    }
+    public static void createDocTable(Connection conn) throws SQLException{
+        String sql = """
+                CREATE TABLE IF NOT EXISTS documents (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                profileID INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                surname TEXT NOT NULL,
+                type VARCHAR2 (1) NOT NULL,
+                year INTEGER NOT NULL,
+                parish TEXT NOT NULL,
+                city TEXT NULL,
+                village TEXT NULL,
+                branch TEXT NOT NULL,
+                info TEXT NULL,
+                isPinned BOOLEAN NOT NULL,
+                FOREIGN KEY (profileID) REFERENCES profiles(id)
+                );
+                """;
+        try(Statement stnt = conn.createStatement()) {
+            stnt.execute(sql);
         }
     }
 }
