@@ -6,51 +6,34 @@ import java.util.Scanner;
 public class Main {
     private static final String DB_URL = "jdbc:sqlite:gen.db";
 
-    public static void main(String[] args) {
-        try (Connection conn = DriverManager.getConnection(DB_URL)) {
-            Statement s = conn.createStatement();
-            createProfTable(conn);
-            createDocTable(conn);
+    public static void main(String[] args) throws SQLException{
+        createTable();
 
-           // Placeholder for adding profiles
-            Scanner sc = new Scanner(System.in);
-            String a = sc.nextLine();
-            addProfile(conn, a);
-            String b = sc.nextLine();
-            addProfile(conn, b);
-
-
-            /*
-            Placeholder for adding documents
-             */
-            addDocument( conn, 5, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
-
-
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-        }
+            //Placeholder for adding documents
+//            addProfile("profile1");
+//            addDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
 
     }
 
-    public static void createProfTable(Connection conn) throws SQLException {
-        String sql = """
+    public static Connection connect() throws SQLException {
+        Connection conn = DriverManager.getConnection(DB_URL);
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = ON");
+
+        }
+        return conn;
+    }
+
+    public static void createTable() throws SQLException {
+        String profiles = """
                
                 CREATE TABLE IF NOT EXISTS profiles(
                id INTEGER PRIMARY KEY AUTOINCREMENT,
                profileName TEXT UNIQUE NOT NULL
                                           );
                 """;
-        try(Statement stnt = conn.createStatement()) {
-            stnt.
 
-        execute(
-
-    sql);
-
-    }
-    }
-    public static void createDocTable(Connection conn) throws SQLException{
-        String sql = """
+        String docs = """
                 CREATE TABLE IF NOT EXISTS documents (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 profileID INTEGER NOT NULL,
@@ -67,14 +50,17 @@ public class Main {
                 FOREIGN KEY (profileID) REFERENCES profiles(id)
                 );
                  """;
-        try(Statement stnt = conn.createStatement()) {
-            stnt.execute(sql);
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(profiles);
+            stmt.execute(docs);
         }
     }
 
-    public static void addProfile(Connection conn, String profileName) throws SQLException {
+
+    public static void addProfile(String profileName) throws SQLException {
         String check = "SELECT 1 FROM profiles WHERE profileName = ? LIMIT 1";
-        try(PreparedStatement ps = conn.prepareStatement(check)){
+        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(check)){
             ps.setString(1,profileName);
 
             try (ResultSet rs = ps.executeQuery()) { //checks if profile is unique
@@ -108,35 +94,38 @@ public class Main {
 
     }
 
-    public static void addDocument(Connection conn, int profile, String name, String surname, char type, int year, String parish, String city, String village, String branch, String info) throws SQLException{
-       String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
+    public static void addDocument(int profile, String name, String surname, char type, int year, String parish, String city, String village, String branch, String info) throws SQLException {
+        String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
+        try(Connection conn = connect()){
+            try {
+                conn.setAutoCommit(false);
+                try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    ps.setInt(1, profile);
+                    ps.setString(2, name);
+                    ps.setString(3, surname);
+                    ps.setString(4, String.valueOf(type));
+                    ps.setInt(5, year);
+                    ps.setString(6, parish);
+                    ps.setString(7, city);
+                    ps.setString(8, village);
+                    ps.setString(9, branch);
+                    ps.setString(10, info);
 
-        try {
-            conn.setAutoCommit(false);
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setInt(1, profile);
-                ps.setString(2, name);
-                ps.setString(3, surname);
-                ps.setString(4, String.valueOf(type));
-                ps.setInt(5, year);
-                ps.setString(6, parish);
-                ps.setString(7, city);
-                ps.setString(8, village);
-                ps.setString(9, branch);
-                ps.setString(10, info);
+                    ps.executeUpdate();
+                }
+                conn.commit();
+            } catch (SQLException e) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ignored) {
+                }
 
-                ps.executeUpdate();
+            } finally {
+                try {
+                    conn.setAutoCommit(true);
+                } catch (SQLException ignored) {}
             }
-            conn.commit();
-        } catch (SQLException e) {
-            try {
-                conn.rollback();
-            } catch (SQLException ignored) {}
-
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException ignored) {}
         }
     }
+    public static void displayDocument(int id) throws SQLException{}
 }
