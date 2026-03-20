@@ -127,6 +127,6 @@ public class Main {
             }
         }
     }
-    //pls work
+
     public static void displayDocument(int id) throws SQLException{}
 }
