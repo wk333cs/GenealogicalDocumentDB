@@ -28,7 +28,7 @@ public class Main {
         String profiles = """
                
                 CREATE TABLE IF NOT EXISTS profiles(
-               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               profileID INTEGER PRIMARY KEY AUTOINCREMENT,
                profileName TEXT UNIQUE NOT NULL
                                           );
                 """;
@@ -47,7 +47,7 @@ public class Main {
                 branch TEXT NOT NULL,
                 info TEXT NULL,
                 isPinned BOOLEAN NOT NULL,
-                FOREIGN KEY (profileID) REFERENCES profiles(id)
+                FOREIGN KEY (profileID) REFERENCES profiles(profileID)
                 );
                  """;
         try (Connection conn = connect();
@@ -68,22 +68,9 @@ public class Main {
                 System.out.println("Profile exists already"); //placeholder, normally method to send error message
                 } else {
                     String sql = "INSERT INTO profiles(profileName) VALUES (?)";
-                    try {
-                        conn.setAutoCommit(false);
-                        try (PreparedStatement ps2 = conn.prepareStatement(sql)) {
-                            ps2.setString(1, profileName);
-                            ps2.executeUpdate();
-                        }
-                        conn.commit();
-                    } catch (SQLException e) {
-                        try {
-                            conn.rollback();
-                        } catch (SQLException ignored) {}
-
-                    } finally {
-                        try {
-                            conn.setAutoCommit(true);
-                        } catch (SQLException ignored) {}
+                    try (PreparedStatement ps2 = conn.prepareStatement(sql)) {
+                        ps2.setString(1, profileName);
+                        ps2.executeUpdate();
                     }
                 }
             }
@@ -97,8 +84,6 @@ public class Main {
     public static void addDocument(int profile, String name, String surname, char type, int year, String parish, String city, String village, String branch, String info) throws SQLException {
         String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
         try(Connection conn = connect()){
-            try {
-                conn.setAutoCommit(false);
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setInt(1, profile);
                     ps.setString(2, name);
@@ -113,20 +98,24 @@ public class Main {
 
                     ps.executeUpdate();
                 }
-                conn.commit();
-            } catch (SQLException e) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ignored) {
-                }
+        }
+    }
 
-            } finally {
-                try {
-                    conn.setAutoCommit(true);
-                } catch (SQLException ignored) {}
+    public static void displayDocument(int id) throws SQLException{
+        String sql = "SELECT * FROM documents JOIN profiles USING (profileID) WHERE id =? ";
+        try(Connection conn = connect()){
+            try (PreparedStatement ps = conn.prepareStatement(sql)){
+                ps.setInt(1, id);
+
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()) {
+                    //placeholder, should return the querry so that it can be displayed
+                    System.out.println(rs.getInt("id"));
+                    System.out.println(rs.getInt("profileID"));
+                    System.out.println(rs.getString("profileName"));
+                }
             }
         }
     }
 
-    public static void displayDocument(int id) throws SQLException{}
 }
