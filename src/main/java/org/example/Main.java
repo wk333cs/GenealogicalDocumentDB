@@ -8,6 +8,9 @@ public class Main {
 
     public static void main(String[] args) throws SQLException{
         createTable();
+        displayDocument(1);
+       // addDocument( 2, "Henryk", "Nowak", 'd', 1780, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
+        //editDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
 
             //Placeholder for adding documents
 //            addProfile("profile1");
@@ -111,10 +114,62 @@ public class Main {
                 if(rs.next()) {
                     //placeholder, should return the querry so that it can be displayed
                     System.out.println(rs.getInt("id"));
-                    System.out.println(rs.getInt("profileID"));
+                    System.out.println(rs.getInt("year"));
                     System.out.println(rs.getString("profileName"));
                 }
             }
+        }
+    }
+
+    public static void editDocument(int id, String name, String surname, char type, int year, String parish, String city, String village, String branch, String info) throws SQLException{
+        String sql = "UPDATE documents SET (name, surname, type, year, parish, city, village, branch, info) = (?,?,?,?,?,?,?,?,?) WHERE id=?";
+        try(Connection conn = connect()){
+            try(PreparedStatement ps = conn.prepareStatement(sql)){
+                ps.setString(1, name);
+                ps.setString(2, surname);
+                ps.setString(3, String.valueOf(type));
+                ps.setInt(4, year);
+                ps.setString(5, parish);
+                ps.setString(6, city);
+                ps.setString(7, village);
+                ps.setString(8, branch);
+                ps.setString(9, info);
+                ps.setInt(10, id);
+
+                ps.executeUpdate();
+            }
+        }
+
+    }
+
+    public static void pinClicked(int id) throws SQLException {
+        String sql = "SELECT isPinned FROM documents WHERE id=?";
+        String sqlSetTrue = "Update documents SET isPinned = true WHERE id=?";
+        String sqlSetFalse = "Update documents SET isPinned = false WHERE id=?";
+        try (Connection conn = connect()) {
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, id);
+
+                try(ResultSet rs = ps.executeQuery()){
+                    if (rs.next()){
+                        if(rs.getBoolean("isPinned")){ // was pinned before being clicked
+                            try(PreparedStatement ps2 = conn.prepareStatement(sqlSetFalse)){
+                                ps2.setInt(1, id);
+                                ps2.executeUpdate();
+                            }
+
+                        } else { //was not pinned
+                            try(PreparedStatement ps2 = conn.prepareStatement(sqlSetTrue)){
+                                ps2.setInt(1, id);
+                                ps2.executeUpdate();
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
         }
     }
 
