@@ -1,5 +1,6 @@
 package org.example;
 import java.sql.*;
+import java.util.Collections;
 import java.util.Scanner;
 
 
@@ -140,6 +141,28 @@ public class Main {
             }
         }
 
+    }
+    // so far implemented only for name, replicate code for the other columns
+    public static void search(FilterParameters fp, int profileId) throws SQLException {
+        String placeholder1 = String.join(" OR ", Collections.nCopies(fp.getName().size(), "name LIKE ?"));
+        //Since I want to use LIKE here, I'll have to use OR instead of IN
+        String sql = "SELECT id FROM documents WHERE (profileID = ?) AND (year BETWEEN ? AND ?) AND (" + placeholder1 + ")";
+        try (Connection conn = connect()) {
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, profileId);
+                ps.setInt(2, fp.getFirstYear());
+                ps.setInt(3, fp.getLastYear());
+                int i =4;
+                for(String name: fp.getName()){
+                    ps.setString(i++, "%" +name+ "%");
+
+                }
+                ResultSet rs = ps.executeQuery();
+
+            }
+
+
+        }
     }
 
     public static void pinClicked(int id) throws SQLException {
