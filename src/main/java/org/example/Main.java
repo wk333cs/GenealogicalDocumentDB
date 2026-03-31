@@ -9,7 +9,14 @@ public class Main {
 
     public static void main(String[] args) throws SQLException{
         createTable();
-        displayDocument(1);
+        FilterParameters test= new FilterParameters();
+
+//        test.addName("ry");
+//        test.addYearRange(1600,1800);
+//        test.addParish("bu");
+//        search(test, 2);
+
+        //displayDocument(1);
        // addDocument( 2, "Henryk", "Nowak", 'd', 1780, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
         //editDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
 
@@ -144,20 +151,113 @@ public class Main {
     }
     // so far implemented only for name, replicate code for the other columns
     public static void search(FilterParameters fp, int profileId) throws SQLException {
-        String placeholder1 = String.join(" OR ", Collections.nCopies(fp.getName().size(), "name LIKE ?"));
+        String nameHolder;
+        String surnameHolder;
+        String typeHolder;
+        String parishHolder;
+        String cityHolder;
+        String villageHolder;
+        String branchHolder;
+
+        //name
+        if(!fp.getName().isEmpty()) {
+            nameHolder = String.join(" OR ", Collections.nCopies(fp.getName().size(), "name LIKE ?"));
+        } else {
+            nameHolder = "1=1";
+        }
+        //surname
+        if(!fp.getSurname().isEmpty()) {
+            surnameHolder = String.join(" OR ", Collections.nCopies(fp.getSurname().size(), "surname LIKE ?"));
+        } else {
+            surnameHolder = "1=1";
+        }
+        //type*
+        if(!fp.getType().isEmpty()) {
+            typeHolder = String.join(" OR ", Collections.nCopies(fp.getType().size(), "type = ?"));
+        } else {
+            typeHolder = "1=1";
+        }
+        //parish
+        if(!fp.getParish().isEmpty()) {
+            parishHolder = String.join(" OR ", Collections.nCopies(fp.getParish().size(), "parish LIKE ?"));
+        } else {
+            parishHolder = "1=1";
+        }
+        //city
+        if(!fp.getCity().isEmpty()) {
+            cityHolder = String.join(" OR ", Collections.nCopies(fp.getCity().size(), "city LIKE ?"));
+        } else {
+            cityHolder = "1=1";
+        }
+        //village
+        if(!fp.getVillage().isEmpty()) {
+            villageHolder = String.join(" OR ", Collections.nCopies(fp.getVillage().size(), "village LIKE ?"));
+        } else {
+            villageHolder = "1=1";
+        }
+        //branch*
+        if(!fp.getBranch().isEmpty()) {
+            branchHolder = String.join(" OR ", Collections.nCopies(fp.getBranch().size(), "branch = ?"));
+        } else {
+            branchHolder = "1=1";
+        }
+
+
         //Since I want to use LIKE here, I'll have to use OR instead of IN
-        String sql = "SELECT id FROM documents WHERE (profileID = ?) AND (year BETWEEN ? AND ?) AND (" + placeholder1 + ")";
+        String sql = "SELECT id FROM documents WHERE (profileID = ?) AND (year BETWEEN ? AND ?) AND (" + nameHolder + ") AND (" + surnameHolder + ") AND (" + typeHolder + ") AND (" + parishHolder +") AND (" + cityHolder +") AND  (" + villageHolder +") AND  (" + branchHolder +")";
         try (Connection conn = connect()) {
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, profileId);
                 ps.setInt(2, fp.getFirstYear());
                 ps.setInt(3, fp.getLastYear());
                 int i =4;
-                for(String name: fp.getName()){
-                    ps.setString(i++, "%" +name+ "%");
 
-                }
+                    for (String name : fp.getName()) {
+                        ps.setString(i++, "%" + name + "%");
+
+                    }
+
+
+                    for (String surname : fp.getSurname()) {
+                        ps.setString(i++, "%" + surname + "%");
+
+                    }
+
+
+                    for (String type : fp.getType()) {
+                        ps.setString(i++, type);
+
+                    }
+
+
+                    for (String parish : fp.getParish()) {
+                        ps.setString(i++, "%" + parish + "%");
+
+                    }
+
+
+                    for (String city : fp.getCity()) {
+                        ps.setString(i++, "%" + city + "%");
+
+                    }
+
+
+                    for (String village : fp.getVillage()) {
+                        ps.setString(i++, "%" + village + "%");
+
+                    }
+
+
+                    for (String branch : fp.getBranch()) {
+                        ps.setString(i++, branch);
+
+                    }
+
+
                 ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    System.out.println(rs.getInt("id"));
+                }
 
             }
 

@@ -7,8 +7,8 @@ public class FilterParameters {
     Set<String> name = new HashSet<>();
     Set<String> surname = new HashSet<>();
     Set<String> type = new HashSet<>();
-    int firstYear;
-    int lastYear;
+    int firstYear= 0;
+    int lastYear= 9999;
     Set<String> parish = new HashSet<>();
     Set<String> city = new HashSet<>();
     Set<String> village = new HashSet<>();
