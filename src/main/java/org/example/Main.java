@@ -92,20 +92,20 @@ public class Main {
 
     }
 
-    public static void addDocument(int profile, String name, String surname, char type, int year, String parish, String city, String village, String branch, String info) throws SQLException {
+    public static void addDocument(DocumentParameters dp) throws SQLException {
         String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
         try(Connection conn = connect()){
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setInt(1, profile);
-                    ps.setString(2, name);
-                    ps.setString(3, surname);
-                    ps.setString(4, String.valueOf(type));
-                    ps.setInt(5, year);
-                    ps.setString(6, parish);
-                    ps.setString(7, city);
-                    ps.setString(8, village);
-                    ps.setString(9, branch);
-                    ps.setString(10, info);
+                    ps.setInt(1, dp.profile);
+                    ps.setString(2, dp.name);
+                    ps.setString(3, dp.surname);
+                    ps.setString(4, String.valueOf(dp.type));
+                    ps.setInt(5, dp.year);
+                    ps.setString(6, dp.parish);
+                    ps.setString(7, dp.city);
+                    ps.setString(8, dp.village);
+                    ps.setString(9,dp. branch);
+                    ps.setString(10, dp.info);
 
                     ps.executeUpdate();
                 }
@@ -129,20 +129,20 @@ public class Main {
         }
     }
 
-    public static void editDocument(int id, String name, String surname, char type, int year, String parish, String city, String village, String branch, String info) throws SQLException{
+    public static void editDocument(DocumentParameters dp) throws SQLException{
         String sql = "UPDATE documents SET (name, surname, type, year, parish, city, village, branch, info) = (?,?,?,?,?,?,?,?,?) WHERE id=?";
         try(Connection conn = connect()){
             try(PreparedStatement ps = conn.prepareStatement(sql)){
-                ps.setString(1, name);
-                ps.setString(2, surname);
-                ps.setString(3, String.valueOf(type));
-                ps.setInt(4, year);
-                ps.setString(5, parish);
-                ps.setString(6, city);
-                ps.setString(7, village);
-                ps.setString(8, branch);
-                ps.setString(9, info);
-                ps.setInt(10, id);
+                ps.setString(1, dp.name);
+                ps.setString(2, dp.surname);
+                ps.setString(3, String.valueOf(dp.type));
+                ps.setInt(4, dp.year);
+                ps.setString(5, dp.parish);
+                ps.setString(6, dp.city);
+                ps.setString(7, dp.village);
+                ps.setString(8, dp.branch);
+                ps.setString(9, dp.info);
+                ps.setInt(10, dp.id);
 
                 ps.executeUpdate();
             }
@@ -256,7 +256,7 @@ public class Main {
 
                 ResultSet rs = ps.executeQuery();
                 while(rs.next()){
-                    System.out.println(rs.getInt("id"));
+                    System.out.println(rs.getInt("id")); //temporary
                 }
 
             }
@@ -264,6 +264,7 @@ public class Main {
 
         }
     }
+
 
     public static void pinClicked(int id) throws SQLException {
         String sql = "SELECT isPinned FROM documents WHERE id=?";
