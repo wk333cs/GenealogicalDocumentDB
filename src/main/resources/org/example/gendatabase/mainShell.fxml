@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane fx:id="mainShell" fx:controller="org.example.gendatabase.HelloController"  xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="600.0" style="-fx-background-color: #4ceefc;" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="TOP_CENTER" layoutX="178.0" layoutY="32.0" prefHeight="100.0" prefWidth="200.0" spacing="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                    <children>
+                        <Button fx:id="returnButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" text="Return" HBox.hgrow="NEVER">
+                            <HBox.margin>
+                                <Insets left="5.0" />
+                            </HBox.margin>
+                        </Button>
+                        <Region prefHeight="200.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <ToggleButton fx:id="searchToggle" focusTraversable="false" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="SEARCH" HBox.hgrow="NEVER">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="SearchAndAdd" />
+                            </toggleGroup>
+                        </ToggleButton>
+                        <ToggleButton fx:id="addToggle" focusTraversable="false" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="ADD" toggleGroup="$SearchAndAdd" HBox.hgrow="NEVER" />
+                        <Region prefHeight="200.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+                        <Circle fx:id="profileDisplay" fill="DODGERBLUE" radius="30.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="NEVER">
+                            <HBox.margin>
+                                <Insets right="5.0" />
+                            </HBox.margin>
+                        </Circle>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </top>
+</BorderPane>

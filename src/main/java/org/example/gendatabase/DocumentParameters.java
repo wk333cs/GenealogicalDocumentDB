@@ -1,4 +1,4 @@
-package org.example;
+package org.example.gendatabase;
 
 public class DocumentParameters {
     int id; //used only in editing
@@ -105,3 +105,4 @@ public class DocumentParameters {
 
 
 }
+

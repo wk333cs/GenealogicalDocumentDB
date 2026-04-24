@@ -1,5 +1,4 @@
-package org.example;
-
+package org.example.gendatabase;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,4 +66,5 @@ public class FilterParameters {
 
 
 }
+
 
