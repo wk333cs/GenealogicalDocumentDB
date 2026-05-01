@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #4ceefc;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="add" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #4ceefc;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.gendatabase.AddController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="250.0" layoutY="75.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <children>
@@ -28,7 +27,7 @@
                                                 <Insets left="15.0" />
                                             </HBox.margin>
                                         </Label>
-                                        <TextField HBox.hgrow="ALWAYS">
+                                        <TextField id="nameField" fx:id="nameField" HBox.hgrow="ALWAYS">
                                             <HBox.margin>
                                                 <Insets right="20.0" />
                                             </HBox.margin>
@@ -42,7 +41,7 @@
                                                 <Insets left="10.0" />
                                             </HBox.margin>
                                         </Label>
-                                        <TextField HBox.hgrow="ALWAYS">
+                                        <TextField id="surnameField" fx:id="surnameField" HBox.hgrow="ALWAYS">
                                             <HBox.margin>
                                                 <Insets right="20.0" />
                                             </HBox.margin>
@@ -52,13 +51,13 @@
                                 <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="50.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="ALWAYS">
                                     <children>
                                         <Label text="Type" />
-                                        <ChoiceBox prefWidth="90.0" />
+                                        <ChoiceBox id="typeBox" fx:id="typeBox" prefWidth="90.0" />
                                         <Region prefHeight="200.0" prefWidth="100.0" HBox.hgrow="NEVER" />
                                         <Label text="Year" />
-                                        <TextField prefWidth="100.0" />
+                                        <TextField id="yearField" fx:id="yearField" prefWidth="100.0" />
                                         <Region prefHeight="200.0" prefWidth="100.0" HBox.hgrow="NEVER" />
                                         <Label text="Branch" />
-                                        <ChoiceBox prefWidth="60.0" HBox.hgrow="NEVER">
+                                        <ChoiceBox id="branchBox" fx:id="branchBox" prefWidth="60.0" HBox.hgrow="NEVER">
                                             <opaqueInsets>
                                                 <Insets />
                                             </opaqueInsets>
@@ -75,7 +74,7 @@
                                                 <Insets left="15.0" />
                                             </padding>
                                         </Label>
-                                        <TextField HBox.hgrow="ALWAYS">
+                                        <TextField id="parishField" fx:id="parishField" HBox.hgrow="ALWAYS">
                                             <HBox.margin>
                                                 <Insets right="20.0" />
                                             </HBox.margin>
@@ -91,7 +90,7 @@
                                                         <Insets left="15.0" />
                                                     </HBox.margin>
                                                 </Label>
-                                                <TextField HBox.hgrow="ALWAYS">
+                                                <TextField id="cityField" fx:id="cityField" HBox.hgrow="ALWAYS">
                                                     <HBox.margin>
                                                         <Insets right="15.0" />
                                                     </HBox.margin>
@@ -105,7 +104,7 @@
                                                         <Insets left="10.0" />
                                                     </padding>
                                                 </Label>
-                                                <TextField HBox.hgrow="ALWAYS">
+                                                <TextField id="villageField" fx:id="villageField" HBox.hgrow="ALWAYS">
                                                     <HBox.margin>
                                                         <Insets right="20.0" />
                                                     </HBox.margin>
@@ -118,7 +117,7 @@
                         </VBox>
                         <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="75.0" spacing="50.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Save" HBox.hgrow="NEVER">
+                                <Button id="saveButton" fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefHeight="50.0" prefWidth="90.0" text="Save" HBox.hgrow="NEVER">
                                     <HBox.margin>
                                         <Insets top="15.0" />
                                     </HBox.margin>
@@ -143,7 +142,7 @@
                         <Insets left="10.0" />
                     </VBox.margin>
                 </Label>
-                <TextArea prefHeight="25.0" prefWidth="570.0" VBox.vgrow="ALWAYS">
+                <TextArea id="infoArea" fx:id="infoArea" prefHeight="25.0" prefWidth="570.0" VBox.vgrow="ALWAYS">
                     <VBox.margin>
                         <Insets bottom="10.0" left="5.0" right="5.0" />
                     </VBox.margin>

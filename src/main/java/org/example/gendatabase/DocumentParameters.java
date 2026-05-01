@@ -14,6 +14,19 @@ public class DocumentParameters {
     String info;
 
     public DocumentParameters(){};
+    //For adding
+    public DocumentParameters(String name, String surname, char type, int year, String parish, String city, String village, String branch, String info, int profile) {
+        setName(name);
+        setSurname(surname);
+        setYear(year);
+        setType(type);
+        setParish(parish);
+        setVillage(village);
+        setCity(city);
+        setBranch(branch);
+        setInfo(info);
+        setProfile(profile);
+    };
 
     public int getId() {
         return id;

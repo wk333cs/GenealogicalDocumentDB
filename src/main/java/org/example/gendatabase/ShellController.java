@@ -3,13 +3,13 @@ package org.example.gendatabase;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
-public class HelloController {
+public class ShellController {
+    static int chosenProfileId = 1;
     @FXML
     private ToggleButton searchToggle;
     @FXML
@@ -21,8 +21,10 @@ public class HelloController {
     @FXML
     public void initialize() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("search.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("add.fxml"));
             mainShell.setCenter(loader.load());
+            AddController controller = loader.getController();
+            controller.setProfileId(chosenProfileId);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -21,7 +21,8 @@ public class DBManager {
             //editDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
 
             //Placeholder for adding documents
-//            addProfile("profile1");
+            addProfile("profile1","#3238a8");
+            addProfile("profile2","#a87d32");
 //            addDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
 
         }
@@ -40,7 +41,8 @@ public class DBManager {
                
                 CREATE TABLE IF NOT EXISTS profiles(
                profileID INTEGER PRIMARY KEY AUTOINCREMENT,
-               profileName TEXT UNIQUE NOT NULL
+               profileName TEXT UNIQUE NOT NULL,
+               profileColor TEXT UNIQUE NOT NULL                                    
                                           );
                 """;
 
@@ -69,7 +71,7 @@ public class DBManager {
         }
 
 
-        public static void addProfile(String profileName) throws SQLException {
+        public static void addProfile(String profileName, String profileColor) throws SQLException {
             String check = "SELECT 1 FROM profiles WHERE profileName = ? LIMIT 1";
             try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(check)){
                 ps.setString(1,profileName);
@@ -78,9 +80,10 @@ public class DBManager {
                     if (rs.next()) {
                         System.out.println("Profile exists already"); //placeholder, normally method to send error message
                     } else {
-                        String sql = "INSERT INTO profiles(profileName) VALUES (?)";
+                        String sql = "INSERT INTO profiles(profileName, profileColor) VALUES (?,?)";
                         try (PreparedStatement ps2 = conn.prepareStatement(sql)) {
                             ps2.setString(1, profileName);
+                            ps2.setString(2,profileColor);
                             ps2.executeUpdate();
                         }
                     }
