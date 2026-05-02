@@ -11,18 +11,17 @@ public class DBManager {
             createTable();
             FilterParameters test= new FilterParameters();
 
-//        test.addName("ry");
-//        test.addYearRange(1600,1800);
-//        test.addParish("bu");
-//        search(test, 2);
+
+        test.addCity("ASDA");
+      search(test, 1);
 
             //displayDocument(1);
             // addDocument( 2, "Henryk", "Nowak", 'd', 1780, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
             //editDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
 
             //Placeholder for adding documents
-            addProfile("profile1","#3238a8");
-            addProfile("profile2","#a87d32");
+            //addProfile("profile1","#3238a8");
+            //addProfile("profile2","#a87d32");
 //            addDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
 
         }

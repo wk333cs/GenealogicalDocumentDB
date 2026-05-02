@@ -117,6 +117,14 @@
                         </VBox>
                         <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="75.0" spacing="50.0" HBox.hgrow="ALWAYS">
                             <children>
+                        <Label fx:id="errorLabel" alignment="TOP_LEFT" opacity="0.0" text="Invalid input, try again" textFill="#f20000">
+                           <HBox.margin>
+                              <Insets top="30.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                                 <Button id="saveButton" fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefHeight="50.0" prefWidth="90.0" text="Save" HBox.hgrow="NEVER">
                                     <HBox.margin>
                                         <Insets top="15.0" />
