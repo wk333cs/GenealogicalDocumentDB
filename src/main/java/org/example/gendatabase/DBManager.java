@@ -1,7 +1,9 @@
 package org.example.gendatabase;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class DBManager {
 
@@ -151,8 +153,9 @@ public class DBManager {
             }
 
         }
-        // so far implemented only for name, replicate code for the other columns
-        public static void search(FilterParameters fp, int profileId) throws SQLException {
+
+        public static List<forDisplay> search(FilterParameters fp, int profileId) throws SQLException {
+            List<forDisplay> searchResults = new ArrayList<>();
             String nameHolder;
             String surnameHolder;
             String typeHolder;
@@ -206,7 +209,7 @@ public class DBManager {
 
 
             //Since I want to use LIKE here, I'll have to use OR instead of IN
-            String sql = "SELECT id FROM documents WHERE (profileID = ?) AND (year BETWEEN ? AND ?) AND (" + nameHolder + ") AND (" + surnameHolder + ") AND (" + typeHolder + ") AND (" + parishHolder +") AND (" + cityHolder +") AND  (" + villageHolder +") AND  (" + branchHolder +")";
+            String sql = "SELECT * FROM documents WHERE (profileID = ?) AND (year BETWEEN ? AND ?) AND (" + nameHolder + ") AND (" + surnameHolder + ") AND (" + typeHolder + ") AND (" + parishHolder +") AND (" + cityHolder +") AND  (" + villageHolder +") AND  (" + branchHolder +")";
             try (Connection conn = connect()) {
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setInt(1, profileId);
@@ -258,8 +261,18 @@ public class DBManager {
 
                     ResultSet rs = ps.executeQuery();
                     while(rs.next()){
-                        System.out.println(rs.getInt("id")); //temporary
+                        String name = rs.getString("name");
+                        String surname = rs.getString("surname");
+                        String type= rs.getString("type");
+                        //change type
+                        int year = rs.getInt("year");
+                        String parish =rs.getString("parish");
+                        String city = rs.getString("city");
+                        String village =rs.getString("village");
+                        String branch = rs.getString("branch");
+                        searchResults.add(new forDisplay (name, surname, type, year, parish, city, village, branch));
                     }
+                    return searchResults;
 
                 }
 

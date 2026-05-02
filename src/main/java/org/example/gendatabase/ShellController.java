@@ -21,13 +21,25 @@ public class ShellController {
     @FXML
     public void initialize() {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
+            mainShell.setCenter(loader.load());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //switch to add screen
+    @FXML
+    private void onAddTogglePressed() throws IOException {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("add.fxml"));
             mainShell.setCenter(loader.load());
             AddController controller = loader.getController();
             controller.setProfileId(chosenProfileId);
-        } catch (IOException e) {
+        } catch (IOException e){
             e.printStackTrace();
         }
+
     }
 
 

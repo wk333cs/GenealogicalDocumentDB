@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane fx:id="mainShell" fx:controller="org.example.gendatabase.ShellController" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainShell" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.gendatabase.ShellController">
     <top>
         <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="600.0" style="-fx-background-color: #4ceefc;" BorderPane.alignment="CENTER">
             <children>
@@ -27,7 +27,7 @@
                                 <ToggleGroup fx:id="SearchAndAdd" />
                             </toggleGroup>
                         </ToggleButton>
-                        <ToggleButton fx:id="addToggle" focusTraversable="false" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="ADD" toggleGroup="$SearchAndAdd" HBox.hgrow="NEVER" />
+                        <ToggleButton fx:id="addToggle" focusTraversable="false" mnemonicParsing="false" onAction="#onAddTogglePressed" prefHeight="60.0" prefWidth="110.0" text="ADD" toggleGroup="$SearchAndAdd" HBox.hgrow="NEVER" />
                         <Region prefHeight="200.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
                         <Circle fx:id="profileDisplay" fill="DODGERBLUE" radius="30.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="NEVER">
                             <HBox.margin>

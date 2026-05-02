@@ -1,21 +1,17 @@
 package org.example.gendatabase;
 
-public class DocumentParameters {
-    int id; //used only in editing
-    int profile; //used only in adding
+public class forDisplay {
     String name;
     String surname;
-    char type;
+    String type;
     int year;
     String parish;
     String city;
     String village;
     String branch;
-    String info;
 
-    protected DocumentParameters(){};
-    //For adding
-    protected DocumentParameters(String name, String surname, char type, int year, String parish, String city, String village, String branch, String info, int profile) {
+    protected forDisplay(){}
+    protected forDisplay(String name,String surname, String type, int year, String parish,String city, String village, String branch){
         setName(name);
         setSurname(surname);
         setYear(year);
@@ -24,17 +20,8 @@ public class DocumentParameters {
         setVillage(village);
         setCity(city);
         setBranch(branch);
-        setInfo(info);
-        setProfile(profile);
-    };
-
-    public int getId() {
-        return id;
     }
 
-    public int getProfile() {
-        return profile;
-    }
 
     public String getName() {
         return name;
@@ -44,7 +31,7 @@ public class DocumentParameters {
         return surname;
     }
 
-    public char getType() {
+    public String getType() {
         return type;
     }
 
@@ -68,18 +55,6 @@ public class DocumentParameters {
         return branch;
     }
 
-    public String getInfo() {
-        return info;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setProfile(int profile) {
-        this.profile = profile;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -88,7 +63,7 @@ public class DocumentParameters {
         this.surname = surname;
     }
 
-    public void setType(char type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -111,11 +86,4 @@ public class DocumentParameters {
     public void setBranch(String branch) {
         this.branch = branch;
     }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-
 }
-
