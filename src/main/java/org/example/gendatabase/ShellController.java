@@ -21,8 +21,10 @@ public class ShellController {
     @FXML
     public void initialize() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("search.fxml"));
             mainShell.setCenter(loader.load());
+            SearchController controller = loader.getController();
+            controller.setProfileId(chosenProfileId);
 
         } catch (IOException e) {
             e.printStackTrace();

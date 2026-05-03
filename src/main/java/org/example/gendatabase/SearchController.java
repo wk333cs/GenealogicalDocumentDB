@@ -9,6 +9,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import org.controlsfx.control.CheckComboBox;
 
 import java.sql.SQLException;
 
@@ -22,6 +23,10 @@ public class SearchController {
     private TextField nameField;
     @FXML
     private TextField surnameField;
+    @FXML
+    private CheckComboBox<String> typeCheckCombo;
+    @FXML
+    private CheckComboBox<String> branchCheckCombo;
     @FXML
     private TextField firstYear;
     @FXML
@@ -57,6 +62,8 @@ public class SearchController {
     }
     @FXML
     public void initialize(){
+        typeCheckCombo.getItems().addAll("Birth", "Marriage", "Death");
+        branchCheckCombo.getItems().addAll("MMM","MMF","MFM","MFF","FMM","FMF","FFM","FFF");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         surnameCol.setCellValueFactory(new PropertyValueFactory<>("surname"));
         yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -66,6 +73,34 @@ public class SearchController {
         villageCol.setCellValueFactory(new PropertyValueFactory<>("village"));
         branchCol.setCellValueFactory(new PropertyValueFactory<>("branch"));
 
+    }
+    //! remember to clear fp, causes errors
+    @FXML
+    public void onFilterPressed() throws SQLException{
+        //loads all selected branches
+
+        ObservableList<String> chosenBranch = branchCheckCombo.getCheckModel().getCheckedItems();
+        for(String branch: chosenBranch){
+            fp.addBranch(branch);
+        }
+        //converts checked type into single corresponding letter, loads into fp
+        ObservableList<String> chosenType = typeCheckCombo.getCheckModel().getCheckedItems();
+        for(String typeString: chosenType){
+            String type = "b";
+            switch (typeString){
+                case "Birth":
+                    type = "b";
+                    break;
+                case "Marriage":
+                    type = "m";
+                    break;
+                case "Death":
+                    type = "d";
+                    break;
+            }
+            fp.addType(type);
+        }
+        loadResults(fp);
     }
 
     //handling text inputs
@@ -93,6 +128,62 @@ public class SearchController {
     public void villageEntered() {
         String village= villageField.getText();
         fp.addVillage(village);
+    }
+    @FXML
+    public void firstYearEntered() {
+        int y1;
+        int y2;
+        //sees if the input is a number
+        try {
+            y1 = Integer.parseInt(firstYear.getText());
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if(lastYear.getText().isEmpty()){
+            fp.addFirstYear(y1);
+        } else {
+            //checks if the other field is a number
+            try {
+                y2 = Integer.parseInt(lastYear.getText());
+            } catch (NumberFormatException e) {
+                return;
+            }
+            if(y1 < y2){
+                fp.addFirstYear(y1);
+            } else {
+                return;
+            }
+
+        }
+    }
+    @FXML
+    public void lastYearEntered() {
+        int y1;
+        int y2;
+        //sees if the input is a number
+        try {
+            y2 = Integer.parseInt(lastYear.getText());
+        } catch (NumberFormatException e) {
+            return;
+        }
+
+        if(firstYear.getText().isEmpty()){
+            fp.addLastYear(y2);
+        } else {
+            //checks if the other field is a number
+            try {
+                y1 = Integer.parseInt(firstYear.getText());
+            } catch (NumberFormatException e) {
+                return;
+            }
+            if(y1 < y2){
+                fp.addLastYear(y2);
+            } else {
+                return;
+            }
+
+        }
     }
 
 

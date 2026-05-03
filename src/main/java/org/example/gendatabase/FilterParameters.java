@@ -23,9 +23,11 @@ public class FilterParameters {
     public void addType(String type){
         this.type.add(type);
     }
-    public void addYearRange(int y1, int y2){
+    public void addFirstYear(int y1){
         this.firstYear = y1;
-        this.lastYear = y2;
+    }
+    public void addLastYear(int y2){
+        this.lastYear=y2;
     }
     public void addParish(String parish){
         this.parish.add(parish);
