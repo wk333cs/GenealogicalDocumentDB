@@ -1,14 +1,18 @@
 package org.example.gendatabase;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 import org.controlsfx.control.CheckComboBox;
 
 import java.sql.SQLException;
@@ -19,6 +23,8 @@ public class SearchController {
     FilterParameters fp = new FilterParameters();
     @FXML
     private Button filterButton;
+    @FXML
+    private Label errorLabel;
     @FXML
     private TextField nameField;
     @FXML
@@ -55,6 +61,16 @@ public class SearchController {
     private TableColumn<forDisplay, String> villageCol;
     @FXML
     private TableColumn<forDisplay, String> branchCol;
+    @FXML
+    private FlowPane nameTagField;
+    @FXML
+    private FlowPane surnameTagField;
+    @FXML
+    private FlowPane parishTagField;
+    @FXML
+    private FlowPane cityTagField;
+    @FXML
+    private FlowPane villageTagField;
     //for getting the profile
     private int profile;
     protected void setProfileId(int id){
@@ -62,6 +78,24 @@ public class SearchController {
     }
     @FXML
     public void initialize(){
+        //search results clickable
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                int recordId = newSelection.getId();
+                System.out.println(recordId); //temp
+            }
+        });
+        //year input
+        firstYear.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                firstYearEntered();
+            }
+        });
+        lastYear.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                lastYearEntered();
+            }
+        });
         typeCheckCombo.getItems().addAll("Birth", "Marriage", "Death");
         branchCheckCombo.getItems().addAll("MMM","MMF","MFM","MFF","FMM","FMF","FFM","FFF");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -101,42 +135,147 @@ public class SearchController {
             fp.addType(type);
         }
         loadResults(fp);
+        fp.type.clear();
+        fp.branch.clear();
     }
 
     //handling text inputs
     @FXML
     public void nameEntered() {
-        String name= nameField.getText();
-        fp.addName(name);
+        String name= nameField.getText().trim();
+        if(!name.isEmpty()) {
+            fp.addName(name);
+            HBox nameTag = new HBox(5);
+            nameTag.setAlignment(Pos.CENTER);
+            nameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(name);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+            //remembers name
+            removeButton.setOnAction(e -> {
+                nameTagField.getChildren().remove(nameTag);
+                fp.getName().remove(name);
+
+            });
+
+            nameTag.getChildren().addAll(label,removeButton);
+            nameTagField.getChildren().addAll(nameTag);
+
+            nameField.clear();
+
+        }
     }
     @FXML
     public void surnameEntered() {
-        String surname= surnameField.getText();
-        fp.addSurname(surname);
+        String surname = surnameField.getText().trim();
+        if(!surname.isEmpty()) {
+            fp.addSurname(surname);
+            HBox surnameTag = new HBox(5);
+            surnameTag.setAlignment(Pos.CENTER);
+            surnameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(surname);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                surnameTagField.getChildren().remove(surnameTag);
+                fp.getSurname().remove(surname);
+            });
+
+            surnameTag.getChildren().addAll(label, removeButton);
+            surnameTagField.getChildren().add(surnameTag);
+
+            surnameField.clear();
+        }
     }
     @FXML
     public void parishEntered() {
-        String parish= parishField.getText();
-        fp.addParish(parish);
+        String parish = parishField.getText().trim();
+        if(!parish.isEmpty()) {
+            fp.addParish(parish);
+            HBox parishTag = new HBox(5);
+            parishTag.setAlignment(Pos.CENTER);
+            parishTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(parish);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                parishTagField.getChildren().remove(parishTag);
+                fp.getParish().remove(parish);
+            });
+
+            parishTag.getChildren().addAll(label, removeButton);
+            parishTagField.getChildren().add(parishTag);
+
+            parishField.clear();
+        }
     }
     @FXML
     public void cityEntered() {
-        String city= cityField.getText();
-        fp.addCity(city);
+        String city = cityField.getText().trim();
+        if(!city.isEmpty()) {
+            fp.addCity(city);
+            HBox cityTag = new HBox(5);
+            cityTag.setAlignment(Pos.CENTER);
+            cityTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(city);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                cityTagField.getChildren().remove(cityTag);
+                fp.getCity().remove(city);
+            });
+
+            cityTag.getChildren().addAll(label, removeButton);
+            cityTagField.getChildren().add(cityTag);
+
+            cityField.clear();
+        }
     }
     @FXML
     public void villageEntered() {
-        String village= villageField.getText();
-        fp.addVillage(village);
+        String village = villageField.getText().trim();
+        if(!village.isEmpty()) {
+            fp.addVillage(village);
+            HBox villageTag = new HBox(5);
+            villageTag.setAlignment(Pos.CENTER);
+            villageTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(village);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black ; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                villageTagField.getChildren().remove(villageTag);
+                fp.getVillage().remove(village);
+            });
+
+            villageTag.getChildren().addAll(label, removeButton);
+            villageTagField.getChildren().add(villageTag);
+
+            villageField.clear();
+        }
     }
+    //room for improvement
     @FXML
     public void firstYearEntered() {
         int y1;
         int y2;
+        if(firstYear.getText().isEmpty()){
+            fp.addFirstYear(0);
+            return;
+        }
         //sees if the input is a number
         try {
             y1 = Integer.parseInt(firstYear.getText());
         } catch (NumberFormatException e) {
+            showErrorMessage();
             return;
         }
 
@@ -147,11 +286,13 @@ public class SearchController {
             try {
                 y2 = Integer.parseInt(lastYear.getText());
             } catch (NumberFormatException e) {
+                showErrorMessage();
                 return;
             }
-            if(y1 < y2){
+            if(y1 <= y2){
                 fp.addFirstYear(y1);
             } else {
+                showErrorMessage();
                 return;
             }
 
@@ -161,10 +302,15 @@ public class SearchController {
     public void lastYearEntered() {
         int y1;
         int y2;
+        if(lastYear.getText().isEmpty()){
+            fp.addLastYear(9999);
+            return;
+        }
         //sees if the input is a number
         try {
             y2 = Integer.parseInt(lastYear.getText());
         } catch (NumberFormatException e) {
+            showErrorMessage();
             return;
         }
 
@@ -175,11 +321,13 @@ public class SearchController {
             try {
                 y1 = Integer.parseInt(firstYear.getText());
             } catch (NumberFormatException e) {
+                showErrorMessage();
                 return;
             }
-            if(y1 < y2){
+            if(y1 <= y2){
                 fp.addLastYear(y2);
             } else {
+                showErrorMessage();
                 return;
             }
 
@@ -199,6 +347,21 @@ public class SearchController {
 
         }
 
+    }
+    //error for year
+    private void showErrorMessage() {
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.3), errorLabel);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+
+        PauseTransition stayVisible = new PauseTransition(Duration.seconds(2));
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.3), errorLabel);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        SequentialTransition sequence = new SequentialTransition(fadeIn, stayVisible, fadeOut);
+        sequence.play();
     }
 
 }

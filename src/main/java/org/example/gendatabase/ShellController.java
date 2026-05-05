@@ -21,10 +21,8 @@ public class ShellController {
     @FXML
     public void initialize() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("search.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
             mainShell.setCenter(loader.load());
-            SearchController controller = loader.getController();
-            controller.setProfileId(chosenProfileId);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,6 +36,19 @@ public class ShellController {
             mainShell.setCenter(loader.load());
             AddController controller = loader.getController();
             controller.setProfileId(chosenProfileId);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    private void onSearchTogglePressed() throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("search.fxml"));
+            mainShell.setCenter(loader.load());
+            SearchController controller = loader.getController();
+            controller.setProfileId(chosenProfileId);
+
         } catch (IOException e){
             e.printStackTrace();
         }

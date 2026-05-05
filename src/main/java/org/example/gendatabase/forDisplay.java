@@ -1,6 +1,7 @@
 package org.example.gendatabase;
 
 public class forDisplay {
+    int id;
     String name;
     String surname;
     String type;
@@ -11,7 +12,8 @@ public class forDisplay {
     String branch;
 
     protected forDisplay(){}
-    protected forDisplay(String name,String surname, String type, int year, String parish,String city, String village, String branch){
+    protected forDisplay(int id, String name,String surname, String type, int year, String parish,String city, String village, String branch){
+        setId(id);
         setName(name);
         setSurname(surname);
         setYear(year);
@@ -22,6 +24,9 @@ public class forDisplay {
         setBranch(branch);
     }
 
+    public int getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -54,6 +59,7 @@ public class forDisplay {
     public String getBranch() {
         return branch;
     }
+    public void setId(int id) { this.id = id;}
 
     public void setName(String name) {
         this.name = name;

@@ -22,7 +22,7 @@
                             </HBox.margin>
                         </Button>
                         <Region prefHeight="200.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-                        <ToggleButton fx:id="searchToggle" focusTraversable="false" mnemonicParsing="false" prefHeight="60.0" prefWidth="110.0" text="SEARCH" HBox.hgrow="NEVER">
+                        <ToggleButton fx:id="searchToggle" focusTraversable="false" mnemonicParsing="false" onAction="#onSearchTogglePressed" prefHeight="60.0" prefWidth="110.0" text="SEARCH" HBox.hgrow="NEVER">
                             <toggleGroup>
                                 <ToggleGroup fx:id="SearchAndAdd" />
                             </toggleGroup>

@@ -261,6 +261,7 @@ public class DBManager {
 
                     ResultSet rs = ps.executeQuery();
                     while(rs.next()){
+                        int id= rs.getInt("id");
                         String name = rs.getString("name");
                         String surname = rs.getString("surname");
                         String type= rs.getString("type");
@@ -270,7 +271,7 @@ public class DBManager {
                         String city = rs.getString("city");
                         String village =rs.getString("village");
                         String branch = rs.getString("branch");
-                        searchResults.add(new forDisplay (name, surname, type, year, parish, city, village, branch));
+                        searchResults.add(new forDisplay (id,name, surname, type, year, parish, city, village, branch));
                     }
                     return searchResults;
 
