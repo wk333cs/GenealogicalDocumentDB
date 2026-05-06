@@ -6,15 +6,18 @@ import javafx.animation.SequentialTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import org.controlsfx.control.CheckComboBox;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class SearchController {
@@ -76,13 +79,27 @@ public class SearchController {
     protected void setProfileId(int id){
         profile=id;
     }
+    //for switching into display
+    private ShellController shellController;
+    public void setShellController(ShellController shellController) {
+        this.shellController = shellController;
+    }
+
     @FXML
-    public void initialize(){
+    public void initialize() throws IOException {
         //search results clickable
         table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                int recordId = newSelection.getId();
-                System.out.println(recordId); //temp
+                try{
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("display.fxml"));
+                    shellController.getMainShell().setCenter(loader.load());
+                    DisplayController dc = loader.getController();
+                    dc.setFD(newSelection);
+                    dc.setShellController(shellController);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         //year input
@@ -108,7 +125,7 @@ public class SearchController {
         branchCol.setCellValueFactory(new PropertyValueFactory<>("branch"));
 
     }
-    //! remember to clear fp, causes errors
+
     @FXML
     public void onFilterPressed() throws SQLException{
         //loads all selected branches

@@ -41,6 +41,9 @@ public class ShellController {
         }
 
     }
+    public BorderPane getMainShell() {
+        return mainShell;
+    }
     @FXML
     private void onSearchTogglePressed() throws IOException {
         try {
@@ -48,6 +51,8 @@ public class ShellController {
             mainShell.setCenter(loader.load());
             SearchController controller = loader.getController();
             controller.setProfileId(chosenProfileId);
+            //for display
+            controller.setShellController(this);
 
         } catch (IOException e){
             e.printStackTrace();

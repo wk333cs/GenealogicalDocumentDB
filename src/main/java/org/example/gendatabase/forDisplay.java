@@ -10,9 +10,10 @@ public class forDisplay {
     String city;
     String village;
     String branch;
+    String info;
 
     protected forDisplay(){}
-    protected forDisplay(int id, String name,String surname, String type, int year, String parish,String city, String village, String branch){
+    protected forDisplay(int id, String name,String surname, String type, int year, String parish,String city, String village, String branch, String info){
         setId(id);
         setName(name);
         setSurname(surname);
@@ -22,6 +23,7 @@ public class forDisplay {
         setVillage(village);
         setCity(city);
         setBranch(branch);
+        setInfo(info);
     }
 
     public int getId() {
@@ -59,6 +61,11 @@ public class forDisplay {
     public String getBranch() {
         return branch;
     }
+
+    public String getInfo() {
+        return info;
+    }
+
     public void setId(int id) { this.id = id;}
 
     public void setName(String name) {
@@ -91,5 +98,9 @@ public class forDisplay {
 
     public void setBranch(String branch) {
         this.branch = branch;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

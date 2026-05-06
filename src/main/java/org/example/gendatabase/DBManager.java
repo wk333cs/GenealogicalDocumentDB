@@ -271,7 +271,8 @@ public class DBManager {
                         String city = rs.getString("city");
                         String village =rs.getString("village");
                         String branch = rs.getString("branch");
-                        searchResults.add(new forDisplay (id,name, surname, type, year, parish, city, village, branch));
+                        String info = rs.getString("info");
+                        searchResults.add(new forDisplay (id,name, surname, type, year, parish, city, village, branch, info));
                     }
                     return searchResults;
 
