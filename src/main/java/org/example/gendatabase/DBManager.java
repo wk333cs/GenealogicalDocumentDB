@@ -133,20 +133,21 @@ public class DBManager {
             }
         }
 
-        public static void editDocument(DocumentParameters dp) throws SQLException{
-            String sql = "UPDATE documents SET (name, surname, type, year, parish, city, village, branch, info) = (?,?,?,?,?,?,?,?,?) WHERE id=?";
+        public static void editDocument(forDisplay fd) throws SQLException{
+            String sql = "UPDATE documents SET (name, surname, type, year, parish, city, village, branch, info) = (?,?,?,?,?,?,?,?,?) WHERE (id=?) AND (profileID = ?)";
             try(Connection conn = connect()){
                 try(PreparedStatement ps = conn.prepareStatement(sql)){
-                    ps.setString(1, dp.name);
-                    ps.setString(2, dp.surname);
-                    ps.setString(3, String.valueOf(dp.type));
-                    ps.setInt(4, dp.year);
-                    ps.setString(5, dp.parish);
-                    ps.setString(6, dp.city);
-                    ps.setString(7, dp.village);
-                    ps.setString(8, dp.branch);
-                    ps.setString(9, dp.info);
-                    ps.setInt(10, dp.id);
+                    ps.setString(1, fd.getName());
+                    ps.setString(2, fd.getSurname());
+                    ps.setString(3, String.valueOf(fd.getType()));
+                    ps.setInt(4, fd.getYear());
+                    ps.setString(5, fd.getParish());
+                    ps.setString(6, fd.getCity());
+                    ps.setString(7, fd.getVillage());
+                    ps.setString(8, fd.getBranch());
+                    ps.setString(9, fd.getInfo());
+                    ps.setInt(10, fd.getId());
+                    ps.setInt(11, fd.getProfile());
 
                     ps.executeUpdate();
                 }
@@ -272,7 +273,7 @@ public class DBManager {
                         String village =rs.getString("village");
                         String branch = rs.getString("branch");
                         String info = rs.getString("info");
-                        searchResults.add(new forDisplay (id,name, surname, type, year, parish, city, village, branch, info));
+                        searchResults.add(new forDisplay (id,name, surname, type, year, parish, city, village, branch, info, profileId));
                     }
                     return searchResults;
 
