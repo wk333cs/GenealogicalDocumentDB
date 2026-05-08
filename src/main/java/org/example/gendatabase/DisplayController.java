@@ -47,19 +47,7 @@ public class DisplayController {
         nameField.setText(fd.getName());
         surnameField.setText(fd.getSurname());
         yearField.setText(String.valueOf(fd.getYear()));
-        String type="Birth";
-        switch (fd.getType()){
-            case "b":
-                type = "Birth";
-                break;
-            case "m":
-                type = "Marriage";
-                break;
-            case "d":
-                type = "Death";
-                break;
-        }
-        typeField.setText(type);
+        typeField.setText(fd.getType());
         branchField.setText(fd.getBranch());
         parishField.setText(fd.getParish());
         cityField.setText(fd.getCity());

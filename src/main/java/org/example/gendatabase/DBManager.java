@@ -265,8 +265,18 @@ public class DBManager {
                         int id= rs.getInt("id");
                         String name = rs.getString("name");
                         String surname = rs.getString("surname");
-                        String type= rs.getString("type");
-                        //change type
+                        String type="Birth";
+                        switch (rs.getString("type")){
+                            case "b":
+                                type = "Birth";
+                                break;
+                            case "m":
+                                type = "Marriage";
+                                break;
+                            case "d":
+                                type = "Death";
+                                break;
+                        }
                         int year = rs.getInt("year");
                         String parish =rs.getString("parish");
                         String city = rs.getString("city");
@@ -282,6 +292,44 @@ public class DBManager {
 
             }
         }
+    public static List<forDisplay> showPinned( int profileId) throws SQLException {
+        List<forDisplay> allPinned = new ArrayList<>();
+        String sql ="SELECT * FROM documents WHERE profileID=? AND isPinned";
+        try (Connection conn = connect()) {
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, profileId);
+
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()) {
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    String surname = rs.getString("surname");
+                    String type = "Birth";
+                    switch (rs.getString("type")) {
+                        case "b":
+                            type = "Birth";
+                            break;
+                        case "m":
+                            type = "Marriage";
+                            break;
+                        case "d":
+                            type = "Death";
+                            break;
+                    }
+                    int year = rs.getInt("year");
+                    String parish = rs.getString("parish");
+                    String city = rs.getString("city");
+                    String village = rs.getString("village");
+                    String branch = rs.getString("branch");
+                    String info = rs.getString("info");
+                    allPinned.add(new forDisplay(id, name, surname, type, year, parish, city, village, branch, info, profileId));
+                }
+
+            }
+        }
+        return allPinned;
+
+    }
 
 
         public static void pinClicked(int id) throws SQLException {

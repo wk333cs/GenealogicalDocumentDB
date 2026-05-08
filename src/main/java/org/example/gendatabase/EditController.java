@@ -49,19 +49,7 @@ public class EditController {
         yearField.setText(String.valueOf(fd.getYear()));
         //type
         typeCombo.getItems().addAll("Birth","Marriage","Death");
-        String type="Birth";
-        switch (fd.getType()){
-            case "b":
-                type = "Birth";
-                break;
-            case "m":
-                type = "Marriage";
-                break;
-            case "d":
-                type = "Death";
-                break;
-        }
-        typeCombo.setValue(type);
+        typeCombo.setValue(fd.getType());
         //branch
         branchCombo.getItems().addAll("MMM","MMF","MFM","MFF","FMM","FMF","FFM","FFF");
         branchCombo.setValue(fd.getBranch());

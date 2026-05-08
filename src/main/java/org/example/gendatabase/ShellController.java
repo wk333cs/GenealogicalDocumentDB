@@ -7,6 +7,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ShellController {
     static int chosenProfileId = 1;
@@ -19,10 +20,14 @@ public class ShellController {
     @FXML
     private BorderPane mainShell;
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
             mainShell.setCenter(loader.load());
+            DefaultController controller = loader.getController();
+            controller.setProfileId(chosenProfileId);
+            //for display and edit
+            controller.setShellController(this);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,7 +56,7 @@ public class ShellController {
             mainShell.setCenter(loader.load());
             SearchController controller = loader.getController();
             controller.setProfileId(chosenProfileId);
-            //for display
+            //for display and edit
             controller.setShellController(this);
 
         } catch (IOException e){
