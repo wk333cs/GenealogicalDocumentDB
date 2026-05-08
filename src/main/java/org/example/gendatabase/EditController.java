@@ -4,9 +4,11 @@ import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class EditController {
@@ -32,6 +34,11 @@ public class EditController {
     private TextField villageField;
     @FXML
     private TextArea infoArea;
+    //auto return to display
+    private ShellController shellController;
+    public void setShellController(ShellController shellController) {
+        this.shellController = shellController;
+    }
     forDisplay fd;
     //initialization
     @FXML
@@ -63,8 +70,16 @@ public class EditController {
         cityField.setText(fd.getCity());
         villageField.setText(fd.getVillage());
         infoArea.setText(fd.getInfo());
+        villageField.setDisable(!cityField.getText().isEmpty());
+        cityField.setDisable(!villageField.getText().isEmpty());
+        cityField.textProperty().addListener((obs, oldVal, newVal ) -> {
+            villageField.setDisable(!newVal.isEmpty());
+        });
+        villageField.textProperty().addListener((obs, oldVal, newVal ) -> {
+            cityField.setDisable(!newVal.isEmpty());
+        });
     }
-//need village city excluisve
+
     @FXML
     public void onSaveButtonPressed() throws SQLException {
         String name = nameField.getText();
@@ -117,6 +132,16 @@ public class EditController {
 
         DBManager.editDocument(fd);
         //return to display
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("display.fxml"));
+            shellController.getMainShell().setCenter(loader.load());
+            DisplayController dc = loader.getController();
+            dc.setFD(fd);
+            dc.setShellController(shellController);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }

@@ -87,6 +87,7 @@ public class SearchController {
 
     @FXML
     public void initialize() throws IOException {
+
         //search results clickable
         table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {

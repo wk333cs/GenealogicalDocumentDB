@@ -75,6 +75,7 @@ public class DisplayController {
             shellController.getMainShell().setCenter(loader.load());
             EditController ec = loader.getController();
             ec.setFD(fd);
+            ec.setShellController(shellController);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -12,8 +12,20 @@ public class forDisplay {
     String branch;
     String info;
     int profile;
-
-    protected forDisplay(){}
+    //for adding
+    protected forDisplay( String name,String surname, String type, int year, String parish,String city, String village, String branch, String info, int profile){
+        setName(name);
+        setSurname(surname);
+        setYear(year);
+        setType(type);
+        setParish(parish);
+        setVillage(village);
+        setCity(city);
+        setBranch(branch);
+        setInfo(info);
+        setProfile(profile);
+    }
+    //everything else
     protected forDisplay(int id, String name,String surname, String type, int year, String parish,String city, String village, String branch, String info, int profile){
         setId(id);
         setName(name);

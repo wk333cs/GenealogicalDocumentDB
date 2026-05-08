@@ -82,7 +82,7 @@ public class AddController {
            return;
         }
         String typeString = typeBox.getValue();
-        char type ='b';
+        String type ="b";
         String parish = parishField.getText();
         String city = cityField.getText();
         String village = villageField.getText();
@@ -96,13 +96,13 @@ public class AddController {
         //changes visible string into char
         switch (typeString){
             case "Birth":
-                type = 'b';
+                type = "b";
                 break;
             case "Marriage":
-                type = 'm';
+                type = "m";
                 break;
             case "Death":
-                type = 'd';
+                type = "d";
                 break;
         }
         //village + city empty check
@@ -111,10 +111,10 @@ public class AddController {
             return;
         }
         //modal class
-        DocumentParameters dp = new DocumentParameters(name, surname, type, year, parish, city, village,  branch, info, profile);
+        forDisplay fd = new forDisplay(name, surname, type, year, parish, city, village,  branch, info, profile);
 
         try {
-            DBManager.addDocument(dp);
+            DBManager.addDocument(fd);
             nameField.clear();
             surnameField.clear();
             typeBox.setValue(null);

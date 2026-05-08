@@ -96,42 +96,42 @@ public class DBManager {
 
         }
 
-        public static void addDocument(DocumentParameters dp) throws SQLException {
+        public static void addDocument(forDisplay fd) throws SQLException {
             String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
             try(Connection conn = connect()){
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setInt(1, dp.profile);
-                    ps.setString(2, dp.name);
-                    ps.setString(3, dp.surname);
-                    ps.setString(4, String.valueOf(dp.type));
-                    ps.setInt(5, dp.year);
-                    ps.setString(6, dp.parish);
-                    ps.setString(7, dp.city);
-                    ps.setString(8, dp.village);
-                    ps.setString(9,dp. branch);
-                    ps.setString(10, dp.info);
+                    ps.setInt(1, fd.profile);
+                    ps.setString(2, fd.name);
+                    ps.setString(3, fd.surname);
+                    ps.setString(4, fd.type);
+                    ps.setInt(5, fd.year);
+                    ps.setString(6, fd.parish);
+                    ps.setString(7, fd.city);
+                    ps.setString(8, fd.village);
+                    ps.setString(9,fd.branch);
+                    ps.setString(10, fd.info);
 
                     ps.executeUpdate();
                 }
             }
         }
-
-        public static void displayDocument(int id) throws SQLException{
-            String sql = "SELECT * FROM documents JOIN profiles USING (profileID) WHERE id =? ";
-            try(Connection conn = connect()){
-                try (PreparedStatement ps = conn.prepareStatement(sql)){
-                    ps.setInt(1, id);
-
-                    ResultSet rs = ps.executeQuery();
-                    if(rs.next()) {
-                        //placeholder, should return the querry so that it can be displayed
-                        System.out.println(rs.getInt("id"));
-                        System.out.println(rs.getInt("year"));
-                        System.out.println(rs.getString("profileName"));
-                    }
-                }
-            }
-        }
+//redundant
+//        public static void displayDocument(int id) throws SQLException{
+//            String sql = "SELECT * FROM documents JOIN profiles USING (profileID) WHERE id =? ";
+//            try(Connection conn = connect()){
+//                try (PreparedStatement ps = conn.prepareStatement(sql)){
+//                    ps.setInt(1, id);
+//
+//                    ResultSet rs = ps.executeQuery();
+//                    if(rs.next()) {
+//                        //placeholder, should return the querry so that it can be displayed
+//                        System.out.println(rs.getInt("id"));
+//                        System.out.println(rs.getInt("year"));
+//                        System.out.println(rs.getString("profileName"));
+//                    }
+//                }
+//            }
+//        }
 
         public static void editDocument(forDisplay fd) throws SQLException{
             String sql = "UPDATE documents SET (name, surname, type, year, parish, city, village, branch, info) = (?,?,?,?,?,?,?,?,?) WHERE (id=?) AND (profileID = ?)";
