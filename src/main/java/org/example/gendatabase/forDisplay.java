@@ -12,6 +12,7 @@ public class forDisplay {
     String branch;
     String info;
     int profile;
+    Boolean isPinned= false;
     //for adding
     protected forDisplay( String name,String surname, String type, int year, String parish,String city, String village, String branch, String info, int profile){
         setName(name);
@@ -26,7 +27,7 @@ public class forDisplay {
         setProfile(profile);
     }
     //everything else
-    protected forDisplay(int id, String name,String surname, String type, int year, String parish,String city, String village, String branch, String info, int profile){
+    protected forDisplay(int id, String name,String surname, String type, int year, String parish,String city, String village, String branch, String info, int profile, boolean isPinned){
         setId(id);
         setName(name);
         setSurname(surname);
@@ -38,6 +39,11 @@ public class forDisplay {
         setBranch(branch);
         setInfo(info);
         setProfile(profile);
+        setIsPinned(isPinned);
+    }
+    //used for adding
+    public boolean getIsPinned(){
+        return isPinned;
     }
 
     public int getId() {
@@ -82,6 +88,9 @@ public class forDisplay {
 
     public int getProfile() {
         return profile;
+    }
+    public void setIsPinned(boolean isPinned){
+        this.isPinned=isPinned;
     }
 
     public void setId(int id) { this.id = id;}

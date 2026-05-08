@@ -34,6 +34,8 @@ public class AddController {
     @FXML
     private Label errorLabel;
     @FXML
+    private ToggleButton pinButton;
+    @FXML
     private Button saveButton;
     @FXML
     public void initialize(){
@@ -45,6 +47,14 @@ public class AddController {
         });
         villageField.textProperty().addListener((obs, oldVal, newVal ) -> {
             cityField.setDisable(!newVal.isEmpty());
+        });
+        //text on pin
+        pinButton.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                pinButton.setText("Unpin");
+            } else {
+                pinButton.setText("Pin");
+            }
         });
 
     }
@@ -112,6 +122,7 @@ public class AddController {
         }
         //modal class
         forDisplay fd = new forDisplay(name, surname, type, year, parish, city, village,  branch, info, profile);
+        fd.setIsPinned(pinButton.isSelected());
 
         try {
             DBManager.addDocument(fd);
@@ -124,6 +135,7 @@ public class AddController {
             cityField.clear();
             villageField.clear();
             infoArea.clear();
+            pinButton.setSelected(false);
 
         } catch (Exception e) {
             System.out.println("gotcha" + e);

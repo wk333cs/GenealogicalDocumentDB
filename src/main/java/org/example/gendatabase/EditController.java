@@ -34,6 +34,8 @@ public class EditController {
     private TextField villageField;
     @FXML
     private TextArea infoArea;
+    @FXML
+    private ToggleButton pinButton;
     //auto return to display
     private ShellController shellController;
     public void setShellController(ShellController shellController) {
@@ -43,6 +45,14 @@ public class EditController {
     //initialization
     @FXML
     public void setFD(forDisplay FD){
+        //text on pin
+        pinButton.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                pinButton.setText("Unpin");
+            } else {
+                pinButton.setText("Pin");
+            }
+        });
         fd=FD;
         nameField.setText(fd.getName());
         surnameField.setText(fd.getSurname());
@@ -66,6 +76,12 @@ public class EditController {
         villageField.textProperty().addListener((obs, oldVal, newVal ) -> {
             cityField.setDisable(!newVal.isEmpty());
         });
+        pinButton.setSelected(fd.isPinned);
+    }
+    @FXML
+    public void onPinButtonPressed() throws SQLException{
+        fd.setIsPinned(pinButton.isSelected());
+        DBManager.pinClicked(fd);
     }
 
     @FXML

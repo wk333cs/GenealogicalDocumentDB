@@ -97,19 +97,20 @@ public class DBManager {
         }
 
         public static void addDocument(forDisplay fd) throws SQLException {
-            String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
+            String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try(Connection conn = connect()){
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setInt(1, fd.profile);
-                    ps.setString(2, fd.name);
-                    ps.setString(3, fd.surname);
-                    ps.setString(4, fd.type);
-                    ps.setInt(5, fd.year);
-                    ps.setString(6, fd.parish);
-                    ps.setString(7, fd.city);
-                    ps.setString(8, fd.village);
-                    ps.setString(9,fd.branch);
-                    ps.setString(10, fd.info);
+                    ps.setInt(1, fd.getProfile());
+                    ps.setString(2, fd.getName());
+                    ps.setString(3, fd.getSurname());
+                    ps.setString(4, fd.getType());
+                    ps.setInt(5, fd.getYear());
+                    ps.setString(6, fd.getParish());
+                    ps.setString(7, fd.getCity());
+                    ps.setString(8, fd.getVillage());
+                    ps.setString(9,fd.getBranch());
+                    ps.setString(10, fd.getInfo());
+                    ps.setBoolean(11,fd.getIsPinned());
 
                     ps.executeUpdate();
                 }
@@ -283,7 +284,8 @@ public class DBManager {
                         String village =rs.getString("village");
                         String branch = rs.getString("branch");
                         String info = rs.getString("info");
-                        searchResults.add(new forDisplay (id,name, surname, type, year, parish, city, village, branch, info, profileId));
+                        boolean isPinned= rs.getBoolean("isPinned");
+                        searchResults.add(new forDisplay (id,name, surname, type, year, parish, city, village, branch, info, profileId, isPinned));
                     }
                     return searchResults;
 
@@ -322,7 +324,7 @@ public class DBManager {
                     String village = rs.getString("village");
                     String branch = rs.getString("branch");
                     String info = rs.getString("info");
-                    allPinned.add(new forDisplay(id, name, surname, type, year, parish, city, village, branch, info, profileId));
+                    allPinned.add(new forDisplay(id, name, surname, type, year, parish, city, village, branch, info, profileId, true));
                 }
 
             }
@@ -332,31 +334,17 @@ public class DBManager {
     }
 
 
-        public static void pinClicked(int id) throws SQLException {
-            String sql = "SELECT isPinned FROM documents WHERE id=?";
-            String sqlSetTrue = "Update documents SET isPinned = true WHERE id=?";
-            String sqlSetFalse = "Update documents SET isPinned = false WHERE id=?";
+        public static void pinClicked(forDisplay fd) throws SQLException {
+
+            String sql = "Update documents SET isPinned = ? WHERE id=? AND profileID=?";
+
             try (Connection conn = connect()) {
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setInt(1, id);
+                    ps.setBoolean(1, fd.getIsPinned());
+                    ps.setInt(2, fd.getId());
+                    ps.setInt(3,fd.getProfile());
 
-                    try(ResultSet rs = ps.executeQuery()){
-                        if (rs.next()){
-                            if(rs.getBoolean("isPinned")){ // was pinned before being clicked
-                                try(PreparedStatement ps2 = conn.prepareStatement(sqlSetFalse)){
-                                    ps2.setInt(1, id);
-                                    ps2.executeUpdate();
-                                }
-
-                            } else { //was not pinned
-                                try(PreparedStatement ps2 = conn.prepareStatement(sqlSetTrue)){
-                                    ps2.setInt(1, id);
-                                    ps2.executeUpdate();
-                                }
-
-                            }
-                        }
-                    }
+                    ps.executeUpdate();
 
                 }
 

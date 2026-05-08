@@ -5,9 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class DisplayController {
     @FXML
@@ -32,6 +34,8 @@ public class DisplayController {
     private TextField villageField;
     @FXML
     private TextArea infoArea;
+    @FXML
+    private ToggleButton pinButton;
     //for going from display to edit
     private ShellController shellController;
     public void setShellController(ShellController shellController) {
@@ -42,6 +46,14 @@ public class DisplayController {
     forDisplay fd;
     @FXML
     protected void setFD(forDisplay FD){
+        //text on pin
+        pinButton.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                pinButton.setText("Unpin");
+            } else {
+                pinButton.setText("Pin");
+            }
+        });
         fd=FD;
         //initializes all fields
         nameField.setText(fd.getName());
@@ -53,8 +65,14 @@ public class DisplayController {
         cityField.setText(fd.getCity());
         villageField.setText(fd.getVillage());
         infoArea.setText(fd.getInfo());
+        pinButton.setSelected(fd.isPinned);
 
 
+    }
+    @FXML
+    public void onPinButtonPressed() throws SQLException{
+        fd.setIsPinned(pinButton.isSelected());
+        DBManager.pinClicked(fd);
     }
     @FXML
     public void onEditButtonPressed(){
