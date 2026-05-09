@@ -23,7 +23,7 @@ import java.sql.SQLException;
 public class SearchController {
     @FXML
     private AnchorPane search;
-    FilterParameters fp = new FilterParameters();
+
     @FXML
     private Button filterButton;
     @FXML
@@ -74,6 +74,14 @@ public class SearchController {
     private FlowPane cityTagField;
     @FXML
     private FlowPane villageTagField;
+    //for getting the filter parameters
+    FilterParameters fp;
+    protected void setFP(FilterParameters fp) throws SQLException{
+        this.fp=fp;
+        reconstructVisibleFilters();
+        loadResults(this.fp);
+
+    }
     //for getting the profile
     private int profile;
     protected void setProfileId(int id){
@@ -132,11 +140,11 @@ public class SearchController {
         //loads all selected branches
 
         ObservableList<String> chosenBranch = branchCheckCombo.getCheckModel().getCheckedItems();
-        for(String branch: chosenBranch){
-            fp.addBranch(branch);
-        }
+        fp.getBranch().clear();
+        fp.getBranch().addAll(chosenBranch);
         //converts checked type into single corresponding letter, loads into fp
         ObservableList<String> chosenType = typeCheckCombo.getCheckModel().getCheckedItems();
+        fp.getType().clear();
         for(String typeString: chosenType){
             String type = "b";
             switch (typeString){
@@ -153,8 +161,7 @@ public class SearchController {
             fp.addType(type);
         }
         loadResults(fp);
-        fp.type.clear();
-        fp.branch.clear();
+
     }
 
     //handling text inputs
@@ -380,6 +387,132 @@ public class SearchController {
 
         SequentialTransition sequence = new SequentialTransition(fadeIn, stayVisible, fadeOut);
         sequence.play();
+    }
+
+    private void reconstructVisibleFilters(){
+        if(fp.getFirstYear()!=0){
+            firstYear.setText(String.valueOf(fp.getFirstYear()));
+        }
+        if(fp.getLastYear()!=9999){
+            firstYear.setText(String.valueOf(fp.getFirstYear()));
+        }
+        if(!fp.getType().isEmpty()) {
+            for (String type : fp.getType()) {
+                switch (type) {
+                    case "b":
+                        type = "Birth";
+                        break;
+                    case "m":
+                        type = "Marriage";
+                        break;
+                    case "d":
+                        type = "Death";
+                        break;
+                }
+                typeCheckCombo.getCheckModel().check(type);
+            }
+        }
+        if(!fp.getBranch().isEmpty()) {
+            for (String branch : fp.getBranch()) {
+                branchCheckCombo.getCheckModel().check(branch);
+            }
+        }
+
+        for(String name: fp.getName()){
+            HBox nameTag = new HBox(5);
+            nameTag.setAlignment(Pos.CENTER);
+            nameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(name);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+            //remembers name
+            removeButton.setOnAction(e -> {
+                nameTagField.getChildren().remove(nameTag);
+                fp.getName().remove(name);
+
+            });
+
+            nameTag.getChildren().addAll(label,removeButton);
+            nameTagField.getChildren().addAll(nameTag);
+
+
+        }
+
+        for(String surname : fp.getSurname()){
+            HBox surnameTag = new HBox(5);
+            surnameTag.setAlignment(Pos.CENTER);
+            surnameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(surname);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                surnameTagField.getChildren().remove(surnameTag);
+                fp.getSurname().remove(surname);
+            });
+
+            surnameTag.getChildren().addAll(label, removeButton);
+            surnameTagField.getChildren().add(surnameTag);
+        }
+
+        for(String parish : fp.getParish()){
+            HBox parishTag = new HBox(5);
+            parishTag.setAlignment(Pos.CENTER);
+            parishTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(parish);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                parishTagField.getChildren().remove(parishTag);
+                fp.getParish().remove(parish);
+            });
+
+            parishTag.getChildren().addAll(label, removeButton);
+            parishTagField.getChildren().add(parishTag);
+        }
+
+        for(String city : fp.getCity()){
+            HBox cityTag = new HBox(5);
+            cityTag.setAlignment(Pos.CENTER);
+            cityTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(city);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                cityTagField.getChildren().remove(cityTag);
+                fp.getCity().remove(city);
+            });
+
+            cityTag.getChildren().addAll(label, removeButton);
+            cityTagField.getChildren().add(cityTag);
+        }
+
+        for(String village : fp.getVillage()){
+            HBox villageTag = new HBox(5);
+            villageTag.setAlignment(Pos.CENTER);
+            villageTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+
+            Label label = new Label(village);
+            Button removeButton = new Button("x");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+
+            removeButton.setOnAction(e -> {
+                villageTagField.getChildren().remove(villageTag);
+                fp.getVillage().remove(village);
+            });
+
+            villageTag.getChildren().addAll(label, removeButton);
+            villageTagField.getChildren().add(villageTag);
+        }
+
+
+
     }
 
 }

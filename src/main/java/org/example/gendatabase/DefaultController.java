@@ -56,6 +56,7 @@ public class DefaultController {
                     DisplayController dc = loader.getController();
                     dc.setFD(newSelection);
                     dc.setShellController(shellController);
+                    shellController.setOnDefaultToFalse();
 
                 } catch (IOException e) {
                     e.printStackTrace();

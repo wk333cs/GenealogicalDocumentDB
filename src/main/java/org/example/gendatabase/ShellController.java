@@ -10,7 +10,14 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class ShellController {
-    static int chosenProfileId = 1;
+    private int chosenProfileId = 1;
+    //for returning
+    private boolean isOnDefault;
+    public void setOnDefaultToFalse(){
+        isOnDefault=false;
+        returnButton.setText("Pinned");
+    }
+    FilterParameters FP= new FilterParameters();
     @FXML
     private ToggleButton searchToggle;
     @FXML
@@ -28,6 +35,7 @@ public class ShellController {
             controller.setProfileId(chosenProfileId);
             //for display and edit
             controller.setShellController(this);
+            isOnDefault =true;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,6 +49,8 @@ public class ShellController {
             mainShell.setCenter(loader.load());
             AddController controller = loader.getController();
             controller.setProfileId(chosenProfileId);
+            isOnDefault = false;
+            returnButton.setText("Pinned");
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -50,19 +60,50 @@ public class ShellController {
         return mainShell;
     }
     @FXML
-    private void onSearchTogglePressed() throws IOException {
+    private void onSearchTogglePressed() throws IOException, SQLException{
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("search.fxml"));
             mainShell.setCenter(loader.load());
             SearchController controller = loader.getController();
+
             controller.setProfileId(chosenProfileId);
+
             //for display and edit
             controller.setShellController(this);
+            // sets fp and autoloads results
+            controller.setFP(FP);
+            isOnDefault= false;
+            returnButton.setText("Pinned");
 
         } catch (IOException e){
             e.printStackTrace();
         }
 
+
+    }
+
+    @FXML
+    public void onReturnButtonPressed() throws SQLException{
+        if(isOnDefault){
+
+            //placeholder
+
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
+                mainShell.setCenter(loader.load());
+                DefaultController controller = loader.getController();
+                controller.setProfileId(chosenProfileId);
+                //for display and edit
+                controller.setShellController(this);
+                isOnDefault =true;
+                returnButton.setText("Profiles");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
 

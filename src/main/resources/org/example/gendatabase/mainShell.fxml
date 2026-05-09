@@ -16,7 +16,7 @@
             <children>
                 <HBox alignment="TOP_CENTER" layoutX="178.0" layoutY="32.0" prefHeight="100.0" prefWidth="200.0" spacing="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                     <children>
-                        <Button fx:id="returnButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" text="Return" HBox.hgrow="NEVER">
+                        <Button fx:id="returnButton" mnemonicParsing="false" onAction="#onReturnButtonPressed" prefHeight="60.0" prefWidth="60.0" text="Profiles" HBox.hgrow="NEVER">
                             <HBox.margin>
                                 <Insets left="5.0" />
                             </HBox.margin>
