@@ -42,8 +42,8 @@ public class DBManager {
                
                 CREATE TABLE IF NOT EXISTS profiles(
                profileID INTEGER PRIMARY KEY AUTOINCREMENT,
-               profileName TEXT UNIQUE NOT NULL,
-               profileColor TEXT UNIQUE NOT NULL                                    
+               profileName TEXT NOT NULL,
+               profileColor TEXT NOT NULL                                    
                                           );
                 """;
 
@@ -73,27 +73,29 @@ public class DBManager {
 
 
         public static void addProfile(String profileName, String profileColor) throws SQLException {
-            String check = "SELECT 1 FROM profiles WHERE profileName = ? LIMIT 1";
-            try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(check)){
-                ps.setString(1,profileName);
 
-                try (ResultSet rs = ps.executeQuery()) { //checks if profile is unique
-                    if (rs.next()) {
-                        System.out.println("Profile exists already"); //placeholder, normally method to send error message
-                    } else {
-                        String sql = "INSERT INTO profiles(profileName, profileColor) VALUES (?,?)";
-                        try (PreparedStatement ps2 = conn.prepareStatement(sql)) {
-                            ps2.setString(1, profileName);
-                            ps2.setString(2,profileColor);
-                            ps2.executeUpdate();
-                        }
-                    }
+            try(Connection conn = connect()){
+                String sql = "INSERT INTO profiles(profileName, profileColor) VALUES (?,?)";
+                try (PreparedStatement ps1 = conn.prepareStatement(sql)) {
+                    ps1.setString(1, profileName);
+                    ps1.setString(2,profileColor);
+                    ps1.executeUpdate();
                 }
 
             }
 
+        }
+        public static void editProfile(String name, String color, int id) throws SQLException{
+            try(Connection conn = connect()){
+                String sql = "UPDATE profiles SET(profileName, profileColor) = (?,?) WHERE profileID = ? ";
+                try (PreparedStatement ps1 = conn.prepareStatement(sql)) {
+                    ps1.setString(1, name);
+                    ps1.setString(2,color);
+                    ps1.setInt(3,id);
+                    ps1.executeUpdate();
+                }
 
-
+            }
         }
         public static List<ProfileParameters> getProfiles() throws SQLException{
             List<ProfileParameters> allProfiles = new ArrayList<>();

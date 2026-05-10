@@ -12,12 +12,12 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException, SQLException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("profileSelection.fxml"));
+        DBManager.createTable();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("GenDB");
         stage.setScene(scene);
         stage.setMaximized(true);
 
         stage.show();
-        DBManager.createTable();
     }
 }

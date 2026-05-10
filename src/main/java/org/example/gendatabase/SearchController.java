@@ -394,7 +394,7 @@ public class SearchController {
             firstYear.setText(String.valueOf(fp.getFirstYear()));
         }
         if(fp.getLastYear()!=9999){
-            firstYear.setText(String.valueOf(fp.getFirstYear()));
+            lastYear.setText(String.valueOf(fp.getLastYear()));
         }
         if(!fp.getType().isEmpty()) {
             for (String type : fp.getType()) {

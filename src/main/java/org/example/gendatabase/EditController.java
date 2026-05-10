@@ -135,6 +135,8 @@ public class EditController {
         fd.setInfo(info);
 
         DBManager.editDocument(fd);
+        //remembers type as a string for display
+        fd.setType(typeString);
         //return to display
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("display.fxml"));

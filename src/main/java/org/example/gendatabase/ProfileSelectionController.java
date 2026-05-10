@@ -4,11 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,6 +27,11 @@ public class ProfileSelectionController {
     private HBox profileHolder;
     @FXML
     public void initialize() throws SQLException {
+        loadProfiles();
+    }
+    @FXML
+    public void loadProfiles() throws SQLException {
+        profileHolder.getChildren().clear();
         List<ProfileParameters> allProfiles = DBManager.getProfiles();
         for (ProfileParameters pp: allProfiles ){
 
@@ -60,7 +67,32 @@ public class ProfileSelectionController {
             Label nameLabel = new Label(pp.getProfileName());
             nameLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold;");
 
-            profileBox.getChildren().addAll(profIcon, nameLabel);
+            Button editButton = new Button("edit");
+            editButton.setStyle("-fx-font-size: 17px; -fx-font-weight: bold;");
+            editButton.setOnAction(e -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("editProfile.fxml"));
+                    Parent root = loader.load();
+                    EditProfileController epc = loader.getController();
+                    epc.startUp(pp.getProfileId(),pp.getProfileName(),pp.getColour());
+
+                    Stage popup = new Stage();
+                    Stage original = (Stage) profiles.getScene().getWindow();
+                    popup.initOwner(original);
+                    popup.initModality(Modality.APPLICATION_MODAL);
+                    popup.setScene(new Scene(root));
+                    popup.showAndWait();
+                    loadProfiles();
+
+
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+            profileBox.getChildren().addAll(profIcon, nameLabel, editButton);
             profileHolder.getChildren().add(profileBox);
 
         }
@@ -71,7 +103,20 @@ public class ProfileSelectionController {
 
     }
     @FXML
-    public void onAddProfilePressed(){
+    public void onAddProfilePressed() throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("addProfile.fxml"));
+        Parent root = loader.load();
+
+        Stage popup = new Stage();
+        Stage original = (Stage) profiles.getScene().getWindow();
+        popup.initOwner(original);
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setScene(new Scene(root));
+        popup.showAndWait();
+        loadProfiles();
+
 
     }
+    @FXML
+    public void onEditProfilePressed(){}
 }
