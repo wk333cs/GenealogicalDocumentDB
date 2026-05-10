@@ -11,10 +11,12 @@ import java.sql.SQLException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException, SQLException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("mainShell.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 600);
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("profileSelection.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("GenDB");
         stage.setScene(scene);
+        stage.setMaximized(true);
+
         stage.show();
         DBManager.createTable();
     }

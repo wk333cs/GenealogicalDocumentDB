@@ -5,12 +5,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class ShellController {
-    private int chosenProfileId = 1;
+    private int chosenProfileId;
+    public void setChosenProfileId(int profileId){
+        this.chosenProfileId= profileId;
+    }
     //for returning
     private boolean isOnDefault;
     public void setOnDefaultToFalse(){
@@ -25,9 +31,13 @@ public class ShellController {
     @FXML
     private Button returnButton;
     @FXML
+    private Circle profileDisplay;
+    @FXML
     private BorderPane mainShell;
     @FXML
-    public void initialize() throws SQLException {
+    public void startUp(ProfileParameters pp) throws SQLException {
+        this.chosenProfileId= pp.getProfileId();
+        profileDisplay.setFill(Color.web(pp.getColour()));
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
             mainShell.setCenter(loader.load());
@@ -83,13 +93,13 @@ public class ShellController {
     }
 
     @FXML
-    public void onReturnButtonPressed() throws SQLException{
+    public void onReturnButtonPressed() throws SQLException, IOException {
         if(isOnDefault){
-
-            //placeholder
+            Stage stage = (Stage) mainShell.getScene().getWindow();
+            FXMLLoader loader =new FXMLLoader(getClass().getResource("profileSelection.fxml"));
+            stage.getScene().setRoot(loader.load());
 
         } else {
-            try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
                 mainShell.setCenter(loader.load());
                 DefaultController controller = loader.getController();
@@ -98,10 +108,6 @@ public class ShellController {
                 controller.setShellController(this);
                 isOnDefault =true;
                 returnButton.setText("Profiles");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
         }
     }

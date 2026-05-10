@@ -1,0 +1,77 @@
+package org.example.gendatabase;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+
+public class ProfileSelectionController {
+    @FXML
+    private AnchorPane profiles;
+    @FXML
+    private Button addProfile;
+    @FXML
+    private HBox profileHolder;
+    @FXML
+    public void initialize() throws SQLException {
+        List<ProfileParameters> allProfiles = DBManager.getProfiles();
+        for (ProfileParameters pp: allProfiles ){
+
+            profileHolder.setSpacing(45);
+            VBox profileBox = new VBox(5);
+            profileBox.setAlignment(Pos.CENTER);
+
+            Button profIcon = new Button();
+            profIcon.setPrefSize(100, 100);
+            profIcon.setMinSize(100, 100);
+            profIcon.setMaxSize(100, 100);
+            profIcon.setStyle("-fx-background-color: " + pp.getColour() + "; -fx-background-radius: 100;"  + "-fx-border-color: black;" + "-fx-border-radius: 101;" +  "-fx-border-width: 1;"  );
+
+            profIcon.setOnAction(e -> {
+                try {
+                    Stage stage = (Stage) profiles.getScene().getWindow();
+                    FXMLLoader loader =new FXMLLoader(getClass().getResource("mainShell.fxml"));
+
+                    stage.getScene().setRoot(loader.load());
+                    ShellController sc = loader.getController();
+                    sc.startUp(pp);
+
+
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                ;
+
+            });
+
+            Label nameLabel = new Label(pp.getProfileName());
+            nameLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold;");
+
+            profileBox.getChildren().addAll(profIcon, nameLabel);
+            profileHolder.getChildren().add(profileBox);
+
+        }
+
+
+
+
+
+    }
+    @FXML
+    public void onAddProfilePressed(){
+
+    }
+}

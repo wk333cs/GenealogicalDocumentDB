@@ -95,6 +95,25 @@ public class DBManager {
 
 
         }
+        public static List<ProfileParameters> getProfiles() throws SQLException{
+            List<ProfileParameters> allProfiles = new ArrayList<>();
+            String sql= "SELECT * FROM profiles";
+             try(Connection conn = connect()){
+                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                     ResultSet rs = ps.executeQuery();
+                     while(rs.next()){
+                         int id = rs.getInt("profileID");
+                         String name = rs.getString("profileName");
+                         String color = rs.getString("profileColor");
+                         allProfiles.add(new ProfileParameters(id,name,color));
+                     }
+
+                 }
+
+            }
+             return allProfiles;
+        }
+
 
         public static void addDocument(forDisplay fd) throws SQLException {
             String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
