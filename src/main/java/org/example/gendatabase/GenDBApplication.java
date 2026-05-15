@@ -8,10 +8,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class HelloApplication extends Application {
+public class GenDBApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException, SQLException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("profileSelection.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(GenDBApplication.class.getResource("profileSelection.fxml"));
         DBManager.createTable();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("GenDB");

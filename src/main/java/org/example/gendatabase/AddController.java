@@ -91,30 +91,22 @@ public class AddController {
             showErrorMessage();
            return;
         }
-        String typeString = typeBox.getValue();
-        String type ="b";
+        if(year > 9999 || year < 0){
+            showErrorMessage();
+            return;
+        }
+        String type = typeBox.getValue();
         String parish = parishField.getText();
         String city = cityField.getText();
         String village = villageField.getText();
         String branch = branchBox.getValue();
         String info = infoArea.getText();
         //checks for empty
-        if (name.isEmpty() || surname.isEmpty() || parish.isEmpty() || typeString == null || branch == null){
+        if (name.isEmpty() || surname.isEmpty() || parish.isEmpty() || type == null || branch == null){
             showErrorMessage();
             return;
         }
-        //changes visible string into char
-        switch (typeString){
-            case "Birth":
-                type = "b";
-                break;
-            case "Marriage":
-                type = "m";
-                break;
-            case "Death":
-                type = "d";
-                break;
-        }
+
         //village + city empty check
         if(village.isEmpty() && city.isEmpty()){
             showErrorMessage();

@@ -40,6 +40,7 @@ public class DisplayController {
     private ShellController shellController;
     public void setShellController(ShellController shellController) {
         this.shellController = shellController;
+        shellController.deselectToggles();
     }
 
     //object which was clicked

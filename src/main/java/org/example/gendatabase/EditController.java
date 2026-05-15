@@ -95,30 +95,23 @@ public class EditController {
             showErrorMessage();
             return;
         }
-        String typeString = typeCombo.getValue();
-        String type ="b";
+        if(year > 9999 || year < 0){
+            showErrorMessage();
+            return;
+        }
+        String type = typeCombo.getValue();
+
         String parish = parishField.getText();
         String city = cityField.getText();
         String village = villageField.getText();
         String branch = branchCombo.getValue();
         String info = infoArea.getText();
         //checks for empty
-        if (name.isEmpty() || surname.isEmpty() || parish.isEmpty() || typeString == null || branch == null){
+        if (name.isEmpty() || surname.isEmpty() || parish.isEmpty() || type == null || branch == null){
             showErrorMessage();
             return;
         }
-        //changes visible string into char
-        switch (typeString){
-            case "Birth":
-                type = "b";
-                break;
-            case "Marriage":
-                type = "m";
-                break;
-            case "Death":
-                type = "d";
-                break;
-        }
+
         //village + city empty check
         if(village.isEmpty() && city.isEmpty()){
             showErrorMessage();
@@ -135,8 +128,7 @@ public class EditController {
         fd.setInfo(info);
 
         DBManager.editDocument(fd);
-        //remembers type as a string for display
-        fd.setType(typeString);
+
         //return to display
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("display.fxml"));

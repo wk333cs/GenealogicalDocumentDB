@@ -9,25 +9,6 @@ public class DBManager {
 
         private static final String DB_URL = "jdbc:sqlite:gen.db";
 
-        public static void main(String[] args) throws SQLException {
-            createTable();
-            FilterParameters test= new FilterParameters();
-
-
-        test.addCity("ASDA");
-      search(test, 1);
-
-            //displayDocument(1);
-            // addDocument( 2, "Henryk", "Nowak", 'd', 1780, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
-            //editDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
-
-            //Placeholder for adding documents
-            //addProfile("profile1","#3238a8");
-            //addProfile("profile2","#a87d32");
-//            addDocument( 1, "Hilary", "Okulicki", 'd', 1905, "Kutno","Kutno" ,  null, "ffm", "lubił koty");
-
-        }
-
         public static Connection connect() throws SQLException {
             Connection conn = DriverManager.getConnection(DB_URL);
             try (Statement stmt = conn.createStatement()) {
@@ -53,7 +34,7 @@ public class DBManager {
                 profileID INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 surname TEXT NOT NULL,
-                type VARCHAR2 (1) NOT NULL,
+                type TEXT NOT NULL,
                 year INTEGER NOT NULL,
                 parish TEXT NOT NULL,
                 city TEXT NULL,
@@ -137,23 +118,7 @@ public class DBManager {
                 }
             }
         }
-//redundant
-//        public static void displayDocument(int id) throws SQLException{
-//            String sql = "SELECT * FROM documents JOIN profiles USING (profileID) WHERE id =? ";
-//            try(Connection conn = connect()){
-//                try (PreparedStatement ps = conn.prepareStatement(sql)){
-//                    ps.setInt(1, id);
-//
-//                    ResultSet rs = ps.executeQuery();
-//                    if(rs.next()) {
-//                        //placeholder, should return the querry so that it can be displayed
-//                        System.out.println(rs.getInt("id"));
-//                        System.out.println(rs.getInt("year"));
-//                        System.out.println(rs.getString("profileName"));
-//                    }
-//                }
-//            }
-//        }
+
 
         public static void editDocument(forDisplay fd) throws SQLException{
             String sql = "UPDATE documents SET (name, surname, type, year, parish, city, village, branch, info) = (?,?,?,?,?,?,?,?,?) WHERE (id=?) AND (profileID = ?)";
@@ -161,7 +126,7 @@ public class DBManager {
                 try(PreparedStatement ps = conn.prepareStatement(sql)){
                     ps.setString(1, fd.getName());
                     ps.setString(2, fd.getSurname());
-                    ps.setString(3, String.valueOf(fd.getType()));
+                    ps.setString(3, fd.getType());
                     ps.setInt(4, fd.getYear());
                     ps.setString(5, fd.getParish());
                     ps.setString(6, fd.getCity());
@@ -287,18 +252,7 @@ public class DBManager {
                         int id= rs.getInt("id");
                         String name = rs.getString("name");
                         String surname = rs.getString("surname");
-                        String type="Birth";
-                        switch (rs.getString("type")){
-                            case "b":
-                                type = "Birth";
-                                break;
-                            case "m":
-                                type = "Marriage";
-                                break;
-                            case "d":
-                                type = "Death";
-                                break;
-                        }
+                        String type= rs.getString("type");
                         int year = rs.getInt("year");
                         String parish =rs.getString("parish");
                         String city = rs.getString("city");
@@ -315,6 +269,7 @@ public class DBManager {
 
             }
         }
+
     public static List<forDisplay> showPinned( int profileId) throws SQLException {
         List<forDisplay> allPinned = new ArrayList<>();
         String sql ="SELECT * FROM documents WHERE profileID=? AND isPinned";
@@ -327,18 +282,7 @@ public class DBManager {
                     int id = rs.getInt("id");
                     String name = rs.getString("name");
                     String surname = rs.getString("surname");
-                    String type = "Birth";
-                    switch (rs.getString("type")) {
-                        case "b":
-                            type = "Birth";
-                            break;
-                        case "m":
-                            type = "Marriage";
-                            break;
-                        case "d":
-                            type = "Death";
-                            break;
-                    }
+                    String type = rs.getString("type");
                     int year = rs.getInt("year");
                     String parish = rs.getString("parish");
                     String city = rs.getString("city");

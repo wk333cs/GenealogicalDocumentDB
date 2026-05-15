@@ -137,29 +137,15 @@ public class SearchController {
 
     @FXML
     public void onFilterPressed() throws SQLException{
-        //loads all selected branches
+        //loads all selected branches and types
 
         ObservableList<String> chosenBranch = branchCheckCombo.getCheckModel().getCheckedItems();
         fp.getBranch().clear();
         fp.getBranch().addAll(chosenBranch);
-        //converts checked type into single corresponding letter, loads into fp
+
         ObservableList<String> chosenType = typeCheckCombo.getCheckModel().getCheckedItems();
         fp.getType().clear();
-        for(String typeString: chosenType){
-            String type = "b";
-            switch (typeString){
-                case "Birth":
-                    type = "b";
-                    break;
-                case "Marriage":
-                    type = "m";
-                    break;
-                case "Death":
-                    type = "d";
-                    break;
-            }
-            fp.addType(type);
-        }
+        fp.getType().addAll(chosenType);
         loadResults(fp);
 
     }
@@ -398,17 +384,6 @@ public class SearchController {
         }
         if(!fp.getType().isEmpty()) {
             for (String type : fp.getType()) {
-                switch (type) {
-                    case "b":
-                        type = "Birth";
-                        break;
-                    case "m":
-                        type = "Marriage";
-                        break;
-                    case "d":
-                        type = "Death";
-                        break;
-                }
                 typeCheckCombo.getCheckModel().check(type);
             }
         }

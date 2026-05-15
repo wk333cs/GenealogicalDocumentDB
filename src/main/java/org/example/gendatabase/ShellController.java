@@ -14,9 +14,6 @@ import java.sql.SQLException;
 
 public class ShellController {
     private int chosenProfileId;
-    public void setChosenProfileId(int profileId){
-        this.chosenProfileId= profileId;
-    }
     //for returning
     private boolean isOnDefault;
     public void setOnDefaultToFalse(){
@@ -61,6 +58,7 @@ public class ShellController {
             controller.setProfileId(chosenProfileId);
             isOnDefault = false;
             returnButton.setText("Pinned");
+            addToggle.setSelected(true);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -84,6 +82,7 @@ public class ShellController {
             controller.setFP(FP);
             isOnDefault= false;
             returnButton.setText("Pinned");
+            searchToggle.setSelected(true);
 
         } catch (IOException e){
             e.printStackTrace();
@@ -99,6 +98,7 @@ public class ShellController {
             FXMLLoader loader =new FXMLLoader(getClass().getResource("profileSelection.fxml"));
             stage.getScene().setRoot(loader.load());
 
+
         } else {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
                 mainShell.setCenter(loader.load());
@@ -106,10 +106,17 @@ public class ShellController {
                 controller.setProfileId(chosenProfileId);
                 //for display and edit
                 controller.setShellController(this);
+                addToggle.setSelected(false);
+                searchToggle.setSelected(false);
                 isOnDefault =true;
                 returnButton.setText("Profiles");
 
         }
+    }
+
+    public void deselectToggles() {
+        addToggle.setSelected(false);
+        searchToggle.setSelected(false);
     }
 
 
