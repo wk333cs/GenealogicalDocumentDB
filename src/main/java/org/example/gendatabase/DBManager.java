@@ -151,7 +151,7 @@ public class DBManager {
             String cityHolder;
             String villageHolder;
             String branchHolder;
-
+            //creates a string including every inputted:
             //name
             if(!fp.getName().isEmpty()) {
                 nameHolder = String.join(" OR ", Collections.nCopies(fp.getName().size(), "name LIKE ?"));
@@ -204,7 +204,7 @@ public class DBManager {
                     ps.setInt(2, fp.getFirstYear());
                     ps.setInt(3, fp.getLastYear());
                     int i =4;
-
+                    //sets filter parameters
                     for (String name : fp.getName()) {
                         ps.setString(i++, "%" + name + "%");
 

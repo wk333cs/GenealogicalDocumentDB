@@ -24,9 +24,11 @@ public class AddProfileController {
     private Button addPButton;
     String color = "#FFFFFF";
     String name;
+    //handling the color picker
     @FXML
     public void onColorChosen() {
         Color selectedColor = colorPicker.getValue();
+        //command from https://stackoverflow.com/questions/3607858/convert-a-rgb-color-value-to-a-hexadecimal-string
         color = String.format("#%02X%02X%02X", (int)(selectedColor.getRed() * 255), (int)(selectedColor.getGreen() * 255), (int)(selectedColor.getBlue() * 255));
 
     }
@@ -51,6 +53,7 @@ public class AddProfileController {
     }
     @FXML
     public void showErrorMessage(){
+        //utilized https://docs.oracle.com/javase/8/javafx/api/javafx/animation/FadeTransition.html
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.3), errorLabel);
         fadeIn.setFromValue(0.0);
         fadeIn.setToValue(1.0);

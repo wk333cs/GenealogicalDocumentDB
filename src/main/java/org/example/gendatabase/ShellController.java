@@ -67,6 +67,7 @@ public class ShellController {
     public BorderPane getMainShell() {
         return mainShell;
     }
+    //switch to search screen
     @FXML
     private void onSearchTogglePressed() throws IOException, SQLException{
         try {
@@ -90,7 +91,7 @@ public class ShellController {
 
 
     }
-
+    //command for either returning to profile selection or pinned
     @FXML
     public void onReturnButtonPressed() throws SQLException, IOException {
         if(isOnDefault){
@@ -113,7 +114,6 @@ public class ShellController {
 
         }
     }
-
     public void deselectToggles() {
         addToggle.setSelected(false);
         searchToggle.setSelected(false);
