@@ -1,19 +1,19 @@
 package org.example.gendatabase;
 
 public class forDisplay {
-    int id;
-    String name;
-    String surname;
-    String type;
-    int year;
-    String parish;
-    String city;
-    String village;
-    String branch;
-    String info;
-    int profile;
-    Boolean isPinned= false;
-    //for adding
+    private int id;
+    private String name;
+    private String surname;
+    private String type;
+    private int year;
+    private String parish;
+    private String city;
+    private String village;
+    private String branch;
+    private String info; // additional information
+    private int profile; // profile id
+    private Boolean isPinned= false;
+    //constructor used for transferring parameters from the AddController to the DBManager's addDocument() method
     protected forDisplay( String name,String surname, String type, int year, String parish,String city, String village, String branch, String info, int profile){
         setName(name);
         setSurname(surname);
@@ -26,7 +26,7 @@ public class forDisplay {
         setInfo(info);
         setProfile(profile);
     }
-    //everything else
+    //constructor used for transporting parameters to be displayed
     protected forDisplay(int id, String name,String surname, String type, int year, String parish,String city, String village, String branch, String info, int profile, boolean isPinned){
         setId(id);
         setName(name);
@@ -42,14 +42,14 @@ public class forDisplay {
         setIsPinned(isPinned);
     }
     //used for adding
-    public boolean getIsPinned(){
+    protected boolean getIsPinned(){
         return isPinned;
     }
 
-    public int getId() {
+    protected int getId() {
         return id;
     }
-
+// getters for displayed parameters have to be public for propper display through table view
     public String getName() {
         return name;
     }
@@ -82,56 +82,57 @@ public class forDisplay {
         return branch;
     }
 
-    public String getInfo() {
+    protected String getInfo() {
         return info;
     }
 
-    public int getProfile() {
+    protected int getProfile() {
         return profile;
     }
-    public void setIsPinned(boolean isPinned){
+
+    protected void setIsPinned(boolean isPinned){
         this.isPinned=isPinned;
     }
 
-    public void setId(int id) { this.id = id;}
+    protected void setId(int id) { this.id = id;}
 
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 
-    public void setSurname(String surname) {
+    protected void setSurname(String surname) {
         this.surname = surname;
     }
 
-    public void setType(String type) {
+    protected void setType(String type) {
         this.type = type;
     }
 
-    public void setYear(int year) {
+    protected void setYear(int year) {
         this.year = year;
     }
 
-    public void setParish(String parish) {
+    protected void setParish(String parish) {
         this.parish = parish;
     }
 
-    public void setCity(String city) {
+    protected void setCity(String city) {
         this.city = city;
     }
 
-    public void setVillage(String village) {
+    protected void setVillage(String village) {
         this.village = village;
     }
 
-    public void setBranch(String branch) {
+    protected void setBranch(String branch) {
         this.branch = branch;
     }
 
-    public void setInfo(String info) {
+    protected void setInfo(String info) {
         this.info = info;
     }
 
-    public void setProfile(int profile) {
+    protected void setProfile(int profile) {
         this.profile = profile;
     }
 }

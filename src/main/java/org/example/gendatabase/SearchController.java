@@ -11,7 +11,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
@@ -76,16 +75,13 @@ public class SearchController {
     private FlowPane villageTagField;
     //for getting the filter parameters
     FilterParameters fp;
-    protected void setFP(FilterParameters fp) throws SQLException{
-        this.fp=fp;
-        reconstructVisibleFilters();
+    private int profile;
+    protected void setFPAndProfile(FilterParameters fp, int id) throws SQLException{
+        this.fp=fp; //allows for modifying and accessing the FilterParameters object instantiated within the shell controller class
+        profile = id;
+        reconstructVisibleFilters(); //reconstructs the display of search parameters
         loadResults(this.fp);
 
-    }
-    //for getting the profile
-    private int profile;
-    protected void setProfileId(int id){
-        profile=id;
     }
     //for switching into display
     private ShellController shellController;
@@ -152,28 +148,35 @@ public class SearchController {
 
     //handling text inputs
     @FXML
-    public void nameEntered() {
+    public void nameEntered() { // public modifier is necessary for the fxml file to detect the action
         String name= nameField.getText().trim();
         if(!name.isEmpty()) {
-            fp.addName(name);
-            HBox nameTag = new HBox(5);
+            fp.addName(name); //inputted name is added to the set
+            HBox nameTag = new HBox(5); // new HBox is created for displaying the parameter
             nameTag.setAlignment(Pos.CENTER);
             nameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            //sets metadata for handling and removing duplicates
+            nameTag.setUserData(name);
 
             Label label = new Label(name);
             Button removeButton = new Button("x");
             removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
-            //remembers name
+            //assigns an action event for deleting the parameter
             removeButton.setOnAction(e -> {
                 nameTagField.getChildren().remove(nameTag);
-                fp.getName().remove(name);
+                //checks for duplicates of the same name, template from https://www.geeksforgeeks.org/java/stream-anymatch-java-examples/
+                //makes sure to check only through HBoxes to avoid a possible error
+                boolean stillExists = nameTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && name.equals(node.getUserData()));
+                if(!stillExists) { // if there is no duplicates, the name is removed from the set
+                    fp.getName().remove(name);
+                }
 
             });
 
             nameTag.getChildren().addAll(label,removeButton);
             nameTagField.getChildren().addAll(nameTag);
 
-            nameField.clear();
+            nameField.clear(); // text field is cleared
 
         }
     }
@@ -185,6 +188,7 @@ public class SearchController {
             HBox surnameTag = new HBox(5);
             surnameTag.setAlignment(Pos.CENTER);
             surnameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            surnameTag.setUserData(surname);
 
             Label label = new Label(surname);
             Button removeButton = new Button("x");
@@ -192,7 +196,11 @@ public class SearchController {
 
             removeButton.setOnAction(e -> {
                 surnameTagField.getChildren().remove(surnameTag);
-                fp.getSurname().remove(surname);
+                boolean stillExists = surnameTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && surname.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getSurname().remove(surname);
+                }
+
             });
 
             surnameTag.getChildren().addAll(label, removeButton);
@@ -209,6 +217,7 @@ public class SearchController {
             HBox parishTag = new HBox(5);
             parishTag.setAlignment(Pos.CENTER);
             parishTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            parishTag.setUserData(parish);
 
             Label label = new Label(parish);
             Button removeButton = new Button("x");
@@ -216,7 +225,11 @@ public class SearchController {
 
             removeButton.setOnAction(e -> {
                 parishTagField.getChildren().remove(parishTag);
-                fp.getParish().remove(parish);
+                boolean stillExists = parishTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && parish.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getParish().remove(parish);
+                }
+
             });
 
             parishTag.getChildren().addAll(label, removeButton);
@@ -233,6 +246,7 @@ public class SearchController {
             HBox cityTag = new HBox(5);
             cityTag.setAlignment(Pos.CENTER);
             cityTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            cityTag.setUserData(city);
 
             Label label = new Label(city);
             Button removeButton = new Button("x");
@@ -240,7 +254,11 @@ public class SearchController {
 
             removeButton.setOnAction(e -> {
                 cityTagField.getChildren().remove(cityTag);
-                fp.getCity().remove(city);
+                boolean stillExists = cityTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && city.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getCity().remove(city);
+                }
+
             });
 
             cityTag.getChildren().addAll(label, removeButton);
@@ -257,6 +275,7 @@ public class SearchController {
             HBox villageTag = new HBox(5);
             villageTag.setAlignment(Pos.CENTER);
             villageTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            villageTag.setUserData(village);
 
             Label label = new Label(village);
             Button removeButton = new Button("x");
@@ -264,7 +283,11 @@ public class SearchController {
 
             removeButton.setOnAction(e -> {
                 villageTagField.getChildren().remove(villageTag);
-                fp.getVillage().remove(village);
+                boolean stillExists = villageTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && village.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getVillage().remove(village);
+                }
+
             });
 
             villageTag.getChildren().addAll(label, removeButton);
@@ -273,7 +296,7 @@ public class SearchController {
             villageField.clear();
         }
     }
-    //room for improvement
+
     @FXML
     public void firstYearEntered() {
         int y1;
@@ -347,7 +370,7 @@ public class SearchController {
 
 
     @FXML
-    public void loadResults(FilterParameters fp) throws SQLException {
+    private void loadResults(FilterParameters fp) throws SQLException {
         ObservableList<forDisplay> resultList = FXCollections.observableArrayList();
         try {
             resultList.addAll(DBManager.search(fp,profile));
@@ -376,7 +399,7 @@ public class SearchController {
     }
 
     private void reconstructVisibleFilters(){
-        if(fp.getFirstYear()!=0){
+        if(fp.getFirstYear()!=0){ // if the year chosen isn't set to its default value, it is displayed in the text field
             firstYear.setText(String.valueOf(fp.getFirstYear()));
         }
         if(fp.getLastYear()!=9999){
@@ -393,18 +416,25 @@ public class SearchController {
             }
         }
 
-        for(String name: fp.getName()){
-            HBox nameTag = new HBox(5);
+        for(String name: fp.getName()){ // for each name in the set
+            HBox nameTag = new HBox(5); // new HBox is created for displaying the parameter
             nameTag.setAlignment(Pos.CENTER);
             nameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            //sets metadata for handling and removing duplicates
+            nameTag.setUserData(name);
 
             Label label = new Label(name);
             Button removeButton = new Button("x");
             removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
-            //remembers name
+            //assigns an action event for deleting the parameter
             removeButton.setOnAction(e -> {
                 nameTagField.getChildren().remove(nameTag);
-                fp.getName().remove(name);
+                //checks for duplicates of the same name, template from https://www.geeksforgeeks.org/java/stream-anymatch-java-examples/
+                //makes sure to check only through HBoxes to avoid a possible error
+                boolean stillExists = nameTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && name.equals(node.getUserData()));
+                if(!stillExists) { // if there is no duplicates, the name is removed from the set
+                    fp.getName().remove(name);
+                }
 
             });
 
@@ -418,6 +448,7 @@ public class SearchController {
             HBox surnameTag = new HBox(5);
             surnameTag.setAlignment(Pos.CENTER);
             surnameTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            surnameTag.setUserData(surname);
 
             Label label = new Label(surname);
             Button removeButton = new Button("x");
@@ -425,7 +456,11 @@ public class SearchController {
 
             removeButton.setOnAction(e -> {
                 surnameTagField.getChildren().remove(surnameTag);
-                fp.getSurname().remove(surname);
+                boolean stillExists = surnameTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && surname.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getSurname().remove(surname);
+                }
+
             });
 
             surnameTag.getChildren().addAll(label, removeButton);
@@ -436,6 +471,7 @@ public class SearchController {
             HBox parishTag = new HBox(5);
             parishTag.setAlignment(Pos.CENTER);
             parishTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            parishTag.setUserData(parish);
 
             Label label = new Label(parish);
             Button removeButton = new Button("x");
@@ -443,7 +479,11 @@ public class SearchController {
 
             removeButton.setOnAction(e -> {
                 parishTagField.getChildren().remove(parishTag);
-                fp.getParish().remove(parish);
+                boolean stillExists = parishTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && parish.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getParish().remove(parish);
+                }
+
             });
 
             parishTag.getChildren().addAll(label, removeButton);
@@ -454,6 +494,7 @@ public class SearchController {
             HBox cityTag = new HBox(5);
             cityTag.setAlignment(Pos.CENTER);
             cityTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            cityTag.setUserData(city);
 
             Label label = new Label(city);
             Button removeButton = new Button("x");
@@ -461,7 +502,11 @@ public class SearchController {
 
             removeButton.setOnAction(e -> {
                 cityTagField.getChildren().remove(cityTag);
-                fp.getCity().remove(city);
+                boolean stillExists = cityTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && city.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getCity().remove(city);
+                }
+
             });
 
             cityTag.getChildren().addAll(label, removeButton);
@@ -472,14 +517,19 @@ public class SearchController {
             HBox villageTag = new HBox(5);
             villageTag.setAlignment(Pos.CENTER);
             villageTag.setStyle("-fx-background-color: #ffffff; -fx-padding: 2 5 2 5; -fx-background-radius: 10;");
+            villageTag.setUserData(village);
 
             Label label = new Label(village);
             Button removeButton = new Button("x");
-            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black; -fx-cursor: hand;");
+            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: black ; -fx-cursor: hand;");
 
             removeButton.setOnAction(e -> {
                 villageTagField.getChildren().remove(villageTag);
-                fp.getVillage().remove(village);
+                boolean stillExists = villageTagField.getChildren().stream().anyMatch(node -> node instanceof HBox && village.equals(node.getUserData()));
+                if(!stillExists) {
+                    fp.getVillage().remove(village);
+                }
+
             });
 
             villageTag.getChildren().addAll(label, removeButton);

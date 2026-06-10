@@ -42,8 +42,9 @@ public class AddController {
         typeBox.getItems().addAll("Birth","Marriage","Death");
         branchBox.getItems().addAll("MMM","MMF","MFM","MFF","FMM","FMF","FFM","FFF");
         //mutually exclusive village and city
+        //listener detects a change to the value within the city text field
         cityField.textProperty().addListener((obs, oldVal, newVal ) -> {
-            villageField.setDisable(!newVal.isEmpty());
+            villageField.setDisable(!newVal.isEmpty()); //whenever city text field isn't empty, village text field becomes disabled
         });
         villageField.textProperty().addListener((obs, oldVal, newVal ) -> {
             cityField.setDisable(!newVal.isEmpty());
@@ -82,16 +83,16 @@ public class AddController {
 
     @FXML
     protected void onSaveButtonClicked() throws SQLException{
-        String name = nameField.getText();
+        String name = nameField.getText(); //gathers input from text fields
         String surname = surnameField.getText();
         int year;
         try {
-            year = Integer.parseInt(yearField.getText());
+            year = Integer.parseInt(yearField.getText()); // if the year is not a number, an error message is displayed, and the method terminates
         } catch (NumberFormatException e) {
             showErrorMessage();
            return;
         }
-        if(year > 9999 || year < 0){
+        if(year > 9999 || year < 0){ // cheks if the year inputted is within boundary values
             showErrorMessage();
             return;
         }
@@ -101,13 +102,13 @@ public class AddController {
         String village = villageField.getText();
         String branch = branchBox.getValue();
         String info = infoArea.getText();
-        //checks for empty
+        //if any obligatory text field/ choice box is not filled, the method terminates
         if (name.isEmpty() || surname.isEmpty() || parish.isEmpty() || type == null || branch == null){
             showErrorMessage();
             return;
         }
 
-        //village + city empty check
+        //if both the village and city text fields are empty, the method terminates
         if(village.isEmpty() && city.isEmpty()){
             showErrorMessage();
             return;

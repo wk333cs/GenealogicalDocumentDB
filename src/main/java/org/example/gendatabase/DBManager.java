@@ -5,20 +5,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DBManager {
-
+ class DBManager {
+    // communication protocol (JDBC), database driver(SQLite) and database file identifier (gen.db) are specified
         private static final String DB_URL = "jdbc:sqlite:gen.db";
 
-        public static Connection connect() throws SQLException {
-            Connection conn = DriverManager.getConnection(DB_URL);
+        private static Connection connect() throws SQLException {
+            Connection conn = DriverManager.getConnection(DB_URL); // API call that performs session initialization
             try (Statement stmt = conn.createStatement()) {
+                //as in SQLite by default foreign keys are disabled, referential integrity is enforced
                 stmt.execute("PRAGMA foreign_keys = ON");
 
             }
             return conn;
         }
 
-        public static void createTable() throws SQLException {
+        protected static void createTable() throws SQLException {
+            //if such tables are not already established in the database, they are created
             String profiles = """
                
                 CREATE TABLE IF NOT EXISTS profiles(
@@ -45,7 +47,7 @@ public class DBManager {
                 FOREIGN KEY (profileID) REFERENCES profiles(profileID)
                 );
                  """;
-            try (Connection conn = connect();
+            try (Connection conn = connect(); // new connection object is created using connect() method
                  Statement stmt = conn.createStatement()) {
                 stmt.execute(profiles);
                 stmt.execute(docs);
@@ -53,7 +55,7 @@ public class DBManager {
         }
 
 
-        public static void addProfile(String profileName, String profileColor) throws SQLException {
+        protected static void addProfile(String profileName, String profileColor) throws SQLException {
 
             try(Connection conn = connect()){
                 String sql = "INSERT INTO profiles(profileName, profileColor) VALUES (?,?)";
@@ -66,7 +68,7 @@ public class DBManager {
             }
 
         }
-        public static void editProfile(String name, String color, int id) throws SQLException{
+        protected static void editProfile(String name, String color, int id) throws SQLException{
             try(Connection conn = connect()){
                 String sql = "UPDATE profiles SET(profileName, profileColor) = (?,?) WHERE profileID = ? ";
                 try (PreparedStatement ps1 = conn.prepareStatement(sql)) {
@@ -78,7 +80,7 @@ public class DBManager {
 
             }
         }
-        public static List<ProfileParameters> getProfiles() throws SQLException{
+        protected static List<ProfileParameters> getProfiles() throws SQLException{
             List<ProfileParameters> allProfiles = new ArrayList<>();
             String sql= "SELECT * FROM profiles";
              try(Connection conn = connect()){
@@ -98,12 +100,12 @@ public class DBManager {
         }
 
 
-        public static void addDocument(forDisplay fd) throws SQLException {
+        protected static void addDocument(forDisplay fd) throws SQLException {
             String sql = "INSERT INTO documents(profileID, name, surname, type, year, parish, city, village, branch, info, isPinned) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try(Connection conn = connect()){
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setInt(1, fd.getProfile());
-                    ps.setString(2, fd.getName());
+                    ps.setInt(1, fd.getProfile()); // ? are replaced by the chosen datatype
+                    ps.setString(2, fd.getName()); //parametrization ensures literal value inputs, preventing outside modifications of the SQL query
                     ps.setString(3, fd.getSurname());
                     ps.setString(4, fd.getType());
                     ps.setInt(5, fd.getYear());
@@ -120,7 +122,7 @@ public class DBManager {
         }
 
 
-        public static void editDocument(forDisplay fd) throws SQLException{
+        protected static void editDocument(forDisplay fd) throws SQLException{
             String sql = "UPDATE documents SET (name, surname, type, year, parish, city, village, branch, info) = (?,?,?,?,?,?,?,?,?) WHERE (id=?) AND (profileID = ?)";
             try(Connection conn = connect()){
                 try(PreparedStatement ps = conn.prepareStatement(sql)){
@@ -142,7 +144,7 @@ public class DBManager {
 
         }
 
-        public static List<forDisplay> search(FilterParameters fp, int profileId) throws SQLException {
+        protected static List<forDisplay> search(FilterParameters fp, int profileId) throws SQLException {
             List<forDisplay> searchResults = new ArrayList<>();
             String nameHolder;
             String surnameHolder;
@@ -154,9 +156,10 @@ public class DBManager {
             //creates a string including every inputted:
             //name
             if(!fp.getName().isEmpty()) {
+                //the use of LIKE allows the user to search by incomplete words and phrases
                 nameHolder = String.join(" OR ", Collections.nCopies(fp.getName().size(), "name LIKE ?"));
             } else {
-                nameHolder = "1=1";
+                nameHolder = "1=1"; // a true statement used in case no name is inputted as the search parameter
             }
             //surname
             if(!fp.getSurname().isEmpty()) {
@@ -196,26 +199,26 @@ public class DBManager {
             }
 
 
-            //Since I want to use LIKE here, I'll have to use OR instead of IN
+            //All documents matching the query are selected
+            // The result set is the intersection of all conditions for every parameter, hence if the parameter holder holds 1=1, it will not impact the search results in any way
             String sql = "SELECT * FROM documents WHERE (profileID = ?) AND (year BETWEEN ? AND ?) AND (" + nameHolder + ") AND (" + surnameHolder + ") AND (" + typeHolder + ") AND (" + parishHolder +") AND (" + cityHolder +") AND  (" + villageHolder +") AND  (" + branchHolder +")";
             try (Connection conn = connect()) {
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                    //static parameters are set first by replacing the question marks within the SQL statement
                     ps.setInt(1, profileId);
                     ps.setInt(2, fp.getFirstYear());
                     ps.setInt(3, fp.getLastYear());
                     int i =4;
-                    //sets filter parameters
+                    //dynamically changing filter parameters are set analogically through for loops
                     for (String name : fp.getName()) {
-                        ps.setString(i++, "%" + name + "%");
+                        ps.setString(i++, "%" + name + "%"); // use of % allows for the phrase to be found no matter its position
 
                     }
-
 
                     for (String surname : fp.getSurname()) {
                         ps.setString(i++, "%" + surname + "%");
 
                     }
-
 
                     for (String type : fp.getType()) {
                         ps.setString(i++, type);
@@ -248,7 +251,7 @@ public class DBManager {
 
 
                     ResultSet rs = ps.executeQuery();
-                    while(rs.next()){
+                    while(rs.next()){ //the parameters of each search result are transported to be displayed through an array list of forDisplay objects
                         int id= rs.getInt("id");
                         String name = rs.getString("name");
                         String surname = rs.getString("surname");
@@ -270,7 +273,7 @@ public class DBManager {
             }
         }
 
-    public static List<forDisplay> showPinned( int profileId) throws SQLException {
+    protected static List<forDisplay> showPinned( int profileId) throws SQLException {
         List<forDisplay> allPinned = new ArrayList<>();
         String sql ="SELECT * FROM documents WHERE profileID=? AND isPinned";
         try (Connection conn = connect()) {
@@ -299,7 +302,7 @@ public class DBManager {
     }
 
 
-        public static void pinClicked(forDisplay fd) throws SQLException {
+        protected static void pinClicked(forDisplay fd) throws SQLException {
 
             String sql = "Update documents SET isPinned = ? WHERE id=? AND profileID=?";
 

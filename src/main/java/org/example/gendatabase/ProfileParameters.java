@@ -5,33 +5,33 @@ public class ProfileParameters {
     private String profileName;
     private String colour;
 
-    ProfileParameters(int id, String name, String colour){
+   protected ProfileParameters(int id, String name, String colour){
         setProfileId(id);
         setProfileName(name);
         setColour(colour);
     }
 
-    public int getProfileId() {
+    protected int getProfileId() {
         return profileId;
     }
 
-    public void setProfileId(int profileId) {
+    protected void setProfileId(int profileId) {
         this.profileId = profileId;
     }
 
-    public String getProfileName() {
+    protected String getProfileName() {
         return profileName;
     }
 
-    public void setProfileName(String profileName) {
+    protected void setProfileName(String profileName) {
         this.profileName = profileName;
     }
 
-    public String getColour() {
+    protected String getColour() {
         return colour;
     }
 
-    public void setColour(String colour) {
+    protected void setColour(String colour) {
         this.colour = colour;
     }
 

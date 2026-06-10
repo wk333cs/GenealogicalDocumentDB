@@ -3,65 +3,69 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FilterParameters {
-    Set<String> name = new HashSet<>();
-    Set<String> surname = new HashSet<>();
-    Set<String> type = new HashSet<>();
-    int firstYear= 0;
-    int lastYear= 9999;
-    Set<String> parish = new HashSet<>();
-    Set<String> city = new HashSet<>();
-    Set<String> village = new HashSet<>();
-    Set<String> branch = new HashSet<>();
+    private Set<String> name = new HashSet<>();
+    private Set<String> surname = new HashSet<>();
+    private Set<String> type = new HashSet<>();
+    private int firstYear= 0; //without inputting the first year or last year, the default value is set to the boundary value
+    private int lastYear= 9999;
+    private Set<String> parish = new HashSet<>();
+    private Set<String> city = new HashSet<>();
+    private Set<String> village = new HashSet<>();
+    private Set<String> branch = new HashSet<>();
 
-    public FilterParameters(){};
-    public void addName(String name){
+    protected FilterParameters(){};
+    protected void addName(String name){
         this.name.add(name);
     }
-    public void addSurname(String surname){
+    protected void addSurname(String surname){
         this.surname.add(surname);
     }
-    public void addType(String type){
+    protected void addType(String type){
         this.type.add(type);
     }
-    public void addFirstYear(int y1){
+    protected void addFirstYear(int y1){
         this.firstYear = y1;
     }
-    public void addLastYear(int y2){
+    protected void addLastYear(int y2){
         this.lastYear=y2;
     }
-    public void addParish(String parish){
+    protected void addParish(String parish){
         this.parish.add(parish);
     }
-    public void addCity(String city){
+    protected void addCity(String city){
         this.city.add(city);
     }
-    public void addVillage(String village){
+    protected void addVillage(String village){
         this.village.add(village);
     }
-    public void addBranch(String branch){
+    protected void addBranch(String branch){
         this.branch.add(branch);
     }
-    public Set<String> getName() {
+    protected Set<String> getName() {
         return name;
     }
-    public Set<String> getSurname() {
+    protected Set<String> getSurname() {
         return surname;
-    }public Set<String> getType() {
+    }
+    protected Set<String> getType() {
         return type;
-    }public Set<String> getParish() {
+    }
+    protected Set<String> getParish() {
         return parish;
-    }public Set<String> getCity() {
+    }
+    protected Set<String> getCity() {
         return city;
-    }public Set<String> getVillage() {
+    }
+    protected Set<String> getVillage() {
         return village;
     }
-    public Set<String> getBranch() {
+    protected Set<String> getBranch() {
         return branch;
     }
-    public int getFirstYear() {
+    protected int getFirstYear() {
         return firstYear;
     }
-    public int getLastYear() {
+    protected int getLastYear() {
         return lastYear;
     }
 

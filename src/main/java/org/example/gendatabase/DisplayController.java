@@ -66,7 +66,7 @@ public class DisplayController {
         cityField.setText(fd.getCity());
         villageField.setText(fd.getVillage());
         infoArea.setText(fd.getInfo());
-        pinButton.setSelected(fd.isPinned);
+        pinButton.setSelected(fd.getIsPinned());
 
 
     }

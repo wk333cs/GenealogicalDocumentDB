@@ -32,17 +32,17 @@ public class ShellController {
     @FXML
     private BorderPane mainShell;
     @FXML
-    public void startUp(ProfileParameters pp) throws SQLException {
-        this.chosenProfileId= pp.getProfileId();
-        profileDisplay.setFill(Color.web(pp.getColour()));
+    protected void startUp(ProfileParameters pp) throws SQLException { //ProfileParameters are passed by the ProfileSelectionController
+        this.chosenProfileId= pp.getProfileId(); // sets the profile id
+        profileDisplay.setFill(Color.web(pp.getColour())); // sets the color of the icon to match the chosen profile
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml"));
-            mainShell.setCenter(loader.load());
-            DefaultController controller = loader.getController();
-            controller.setProfileId(chosenProfileId);
-            //for display and edit
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("default.fxml")); // new loader is created and the fxml view is instantiated
+            mainShell.setCenter(loader.load()); // the default screen is loaded into the BorderPane
+            DefaultController controller = loader.getController(); // a new controller is instantiated
+            controller.setProfileId(chosenProfileId); //sets profile id and loads pinned documents
+            //passes the ShellController for display and edit controllers to use
             controller.setShellController(this);
-            isOnDefault =true;
+            isOnDefault =true; // used for the return button
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,18 +69,15 @@ public class ShellController {
     }
     //switch to search screen
     @FXML
-    private void onSearchTogglePressed() throws IOException, SQLException{
+    private void onSearchTogglePressed() throws SQLException{
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("search.fxml"));
             mainShell.setCenter(loader.load());
             SearchController controller = loader.getController();
-
-            controller.setProfileId(chosenProfileId);
-
-            //for display and edit
+            //passes the ShellController for display and edit controllers to use
             controller.setShellController(this);
-            // sets fp and autoloads results
-            controller.setFP(FP);
+            // sets the profile id, fp, reconstructs the dynamic GUI elements and autoloads results
+            controller.setFPAndProfile(FP, chosenProfileId);
             isOnDefault= false;
             returnButton.setText("Pinned");
             searchToggle.setSelected(true);

@@ -76,7 +76,7 @@ public class EditController {
         villageField.textProperty().addListener((obs, oldVal, newVal ) -> {
             cityField.setDisable(!newVal.isEmpty());
         });
-        pinButton.setSelected(fd.isPinned);
+        pinButton.setSelected(fd.getIsPinned());
     }
     @FXML
     public void onPinButtonPressed() throws SQLException{
